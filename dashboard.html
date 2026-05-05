@@ -1,0 +1,1623 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="washi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>日本語 学習</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300;400&family=Noto+Sans+JP:wght@300;400;500&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+[data-theme="washi"]{--bg:#f3eee4;--bg2:#e9e0cc;--bg3:#dccfb5;--surface:#f7f2e8;--ink:#2a221c;--ink2:#534538;--ink3:#8e7e6e;--border:rgba(42,34,28,.1);--border2:rgba(42,34,28,.2);--accent:#a8392f;--accent2:#a3792b;--accent3:#3d6863;--ag:rgba(168,57,47,.1);--pill:rgba(42,34,28,.05);--cshadow:none;--neon:none;--known:#3d6863;--learning:#a3792b;--locked:rgba(42,34,28,.06);--ltxt:rgba(42,34,28,.22);--ltex:none;--rl:rgba(168,57,47,.07);}
+[data-theme="dark"]{--bg:#181715;--bg2:#1f1d1a;--bg3:#2a2724;--surface:#1c1b18;--ink:#ebe6dd;--ink2:#a8a39a;--ink3:#6e6961;--border:rgba(255,243,225,.05);--border2:rgba(255,243,225,.11);--accent:#c87752;--accent2:#b59550;--accent3:#7eaa9a;--ag:rgba(200,119,82,.11);--pill:rgba(255,243,225,.04);--cshadow:none;--neon:none;--known:#7eaa9a;--learning:#b59550;--locked:rgba(255,243,225,.04);--ltxt:rgba(255,243,225,.22);--ltex:none;--rl:rgba(200,119,82,.06);}
+/* Theme: washi (light) and dark */
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--ink);font-family:'Noto Sans JP',sans-serif;font-weight:300;min-height:100vh;overflow-x:hidden;transition:background .4s,color .4s;}
+body::before{content:'';position:fixed;inset:0;background-image:var(--ltex);pointer-events:none;z-index:0;}
+.guide{position:fixed;top:0;bottom:0;left:240px;width:1px;background:var(--rl);pointer-events:none;z-index:0;}
+.app{position:relative;z-index:1;display:flex;min-height:100vh;}
+
+/* ── Sidebar ── */
+.sidebar{width:220px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:10;transition:background .4s,border-color .4s;}
+.main{margin-left:220px;flex:1;min-width:0;padding:2rem 2.5rem 4rem;}
+.sb-logo{padding:1.75rem 1.25rem 1.25rem;border-bottom:1px solid var(--border);}
+.sb-logo h1{font-family:'Noto Serif JP',serif;font-size:1.45rem;font-weight:200;letter-spacing:.1em;color:var(--ink);line-height:1.1;}
+.sb-logo .sub{font-family:'Noto Sans JP',sans-serif;font-size:.72rem;color:var(--ink3);margin-top:4px;font-weight:300;}
+.sb-nav{flex:1;padding:1rem 0;overflow-y:auto;}
+.nav-sec{font-family:'Noto Sans JP',sans-serif;font-size:.72rem;color:var(--ink3);padding:1rem 1.25rem .35rem;font-weight:400;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:.65rem 1.25rem;font-size:.82rem;color:var(--ink3);cursor:pointer;transition:all .2s;border-left:2px solid transparent;user-select:none;}
+.nav-item:hover{color:var(--ink);background:var(--pill);}
+.nav-item.active{color:var(--accent);border-left-color:var(--accent);background:var(--ag);font-weight:400;}
+.nav-icon{font-size:.95rem;width:18px;text-align:center;flex-shrink:0;}
+
+/* ── Page header ── */
+.ph{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border2);}
+.ph-title{font-family:'Noto Serif JP',serif;font-size:1.45rem;font-weight:300;color:var(--ink);letter-spacing:.06em;}
+.ph-sub{font-family:'Noto Sans JP',sans-serif;font-size:.78rem;color:var(--ink3);margin-top:4px;font-weight:300;}
+.ph-actions{display:flex;align-items:center;gap:.75rem;}
+.seal{width:40px;height:40px;border:1.5px solid var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Noto Serif JP',serif;font-size:.9rem;color:var(--accent);box-shadow:var(--neon);}
+
+/* ── Views ── */
+.view{display:none;animation:fadeUp .28s ease;}
+.view.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(7px);}to{opacity:1;transform:none;}}
+
+/* ── Grids ── */
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;}
+
+/* ── Cards ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.1rem 1.25rem;transition:background .4s,border-color .4s,box-shadow .4s;box-shadow:var(--cshadow);position:relative;overflow:hidden;}
+.cs{font-family:'Noto Sans JP',sans-serif;font-size:.7rem;color:var(--ink3);letter-spacing:.02em;margin-bottom:6px;font-weight:400;}
+.cv{font-family:'Noto Serif JP',serif;font-size:2.3rem;font-weight:200;color:var(--ink);line-height:1;}
+.cl{font-size:.78rem;color:var(--ink3);margin-top:6px;}
+.ac-r{border-left:2px solid var(--accent);}
+.ac-g{border-left:2px solid var(--accent2);}
+.ac-t{border-left:2px solid var(--accent3);}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:1rem;}
+.sec-head h2{font-family:'Noto Serif JP',serif;font-size:1rem;font-weight:400;color:var(--ink);letter-spacing:.05em;}
+.sec-head span{font-family:'Noto Sans JP',sans-serif;font-size:.78rem;color:var(--ink3);font-weight:300;}
+hr.dv{border:none;border-top:1px solid var(--border);margin:1.75rem 0;}
+
+/* ── Buttons ── */
+.btn{border:none;border-radius:5px;cursor:pointer;font-family:'Noto Sans JP',sans-serif;font-size:.8rem;padding:.5rem 1.1rem;transition:opacity .2s,transform .1s;}
+.btn:hover{opacity:.85;} .btn:active{transform:scale(.98);}
+.btn-r{background:var(--accent);color:#fff;}
+.btn-t{background:var(--accent3);color:#fff;}
+.btn-g{background:var(--accent2);color:#fff;}
+.btn-ghost{background:transparent;border:1px solid var(--border2);color:var(--ink2);}
+.btn-sm{font-size:.72rem;padding:.35rem .8rem;}
+
+/* ── Banners ── */
+.setup-banner{display:none;}
+
+/* Gear icon (top-right floating) */
+.gear-btn{position:fixed;top:1rem;right:1.25rem;z-index:50;width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--ink2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.gear-btn:hover{background:var(--bg3);color:var(--accent);border-color:var(--border2);transform:rotate(30deg);}
+.gear-btn svg{display:block;}
+
+/* Modal enhancements */
+.modal-wide{width:520px;}
+.modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;padding-bottom:.85rem;border-bottom:1px solid var(--border);}
+.modal-head h2{margin-bottom:0;}
+.modal-close{background:none;border:none;font-size:1.5rem;line-height:1;color:var(--ink3);cursor:pointer;padding:0 .25rem;transition:color .15s;}
+.modal-close:hover{color:var(--accent);}
+.settings-section{margin-bottom:1.5rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border);}
+.settings-section:last-of-type{border-bottom:none;}
+.settings-h3{font-family:'Noto Serif JP',serif;font-size:.95rem;color:var(--ink2);margin-bottom:.85rem;font-weight:400;}
+.settings-note{font-size:.74rem;color:var(--ink3);line-height:1.55;margin-top:.4rem;}
+
+/* Theme picker */
+.theme-options{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
+.theme-opt{background:var(--bg3);border:1px solid var(--border2);border-radius:7px;padding:.85rem;cursor:pointer;text-align:left;transition:all .15s;font-family:inherit;color:var(--ink);}
+.theme-opt:hover{border-color:var(--accent);}
+.theme-opt.active{border-color:var(--accent);background:var(--ag);}
+.theme-preview{width:100%;height:38px;border-radius:5px;margin-bottom:.45rem;display:flex;align-items:flex-start;}
+.theme-name{font-family:'Noto Serif JP',serif;font-size:.85rem;color:var(--ink);margin-bottom:2px;}
+.theme-desc{font-size:.7rem;color:var(--ink3);}
+.streak-banner{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent2);border-radius:8px;padding:1.1rem 1.5rem;display:flex;align-items:center;gap:1.25rem;margin-bottom:1.5rem;box-shadow:var(--cshadow);}
+.s-num{font-family:'Noto Serif JP',serif;font-size:3rem;font-weight:200;color:var(--accent2);line-height:1;text-shadow:var(--neon);}
+.s-txt h3{font-family:'Noto Serif JP',serif;font-size:.95rem;font-weight:400;color:var(--ink);}
+.s-txt p{font-size:.75rem;color:var(--ink3);margin-top:2px;}
+
+/* ── Modal ── */
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;align-items:center;justify-content:center;}
+.mo.open{display:flex;}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:2rem;width:480px;max-width:95vw;box-shadow:0 20px 60px rgba(0,0,0,.3),var(--cshadow);max-height:90vh;overflow-y:auto;}
+.modal h2{font-family:'Noto Serif JP',serif;font-size:1.1rem;font-weight:400;margin-bottom:1.25rem;color:var(--ink);}
+.field{margin-bottom:1rem;}
+.field label{display:block;font-size:.78rem;color:var(--ink2);margin-bottom:5px;}
+.field input,.field select,.field textarea{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:5px;padding:.5rem .8rem;font-family:'DM Mono',monospace;font-size:.82rem;color:var(--ink);outline:none;transition:border-color .2s;}
+.field input:focus,.field select:focus{border-color:var(--accent);}
+.mo-actions{display:flex;gap:.75rem;justify-content:flex-end;margin-top:1.5rem;}
+
+/* ── Fact card ── */
+.fact-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;position:relative;box-shadow:var(--cshadow);}
+.fact-lbl{font-family:'Noto Sans JP',sans-serif;font-size:.78rem;color:var(--accent);margin-bottom:.75rem;font-weight:400;}
+.fact-jp{font-family:'Noto Serif JP',serif;font-size:1.35rem;font-weight:300;color:var(--ink);margin-bottom:.35rem;line-height:1.5;}
+.fact-read{font-family:'DM Mono',monospace;font-size:.77rem;color:var(--ink3);margin-bottom:.45rem;font-style:italic;}
+.fact-meaning{font-size:.87rem;color:var(--ink2);line-height:1.6;}
+.fact-ex{margin-top:.7rem;padding-top:.7rem;border-top:1px solid var(--border);font-size:.81rem;color:var(--ink3);}
+.fact-ex strong{color:var(--ink2);font-weight:400;}
+
+/* ── Misc shared ── */
+.rr{display:flex;align-items:center;justify-content:space-between;padding:.55rem 0;border-bottom:1px solid var(--border);font-size:.82rem;}
+.rr:last-child{border-bottom:none;}
+.rr-l{color:var(--ink2);} .rr-r{font-family:'Noto Serif JP',serif;font-size:1rem;color:var(--ink);}
+.loading-pill{display:inline-block;font-family:'DM Mono',monospace;font-size:.67rem;background:var(--pill);color:var(--ink3);border-radius:20px;padding:2px 10px;}
+.err-note{font-size:.73rem;color:var(--accent);margin-top:4px;font-style:italic;}
+.empty-s{text-align:center;padding:2.5rem;color:var(--ink3);font-size:.82rem;}
+.empty-s .ei{font-size:1.8rem;opacity:.22;margin-bottom:.5rem;display:block;}
+.fp{font-family:'Noto Sans JP',sans-serif;font-size:.78rem;padding:4px 12px;border-radius:20px;border:1px solid var(--border2);background:var(--pill);color:var(--ink3);cursor:pointer;transition:all .2s;}
+.fp:hover{color:var(--ink);border-color:var(--accent);}
+.fp.active{background:var(--ag);border-color:var(--accent);color:var(--accent);text-shadow:var(--neon);}
+
+/* ── Weekly bars ── */
+.bars-wrap{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;box-shadow:var(--cshadow);}
+.bars{display:flex;align-items:flex-end;gap:8px;height:130px;margin-top:1rem;}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;height:100%;justify-content:flex-end;}
+.bar-fill{width:100%;border-radius:3px 3px 0 0;transition:height .5s ease;min-height:2px;}
+.bar-day{font-family:'Noto Sans JP',sans-serif;font-size:.7rem;color:var(--ink3);}
+.bar-val{font-family:'DM Mono',monospace;font-size:.59rem;color:var(--ink3);}
+
+/* ── JLPT bars ── */
+.jlpt-bars{display:flex;flex-direction:column;gap:1rem;}
+.jlpt-row{display:flex;align-items:center;gap:1rem;}
+.jlpt-tag{font-family:'Noto Serif JP',serif;font-size:.82rem;width:30px;flex-shrink:0;color:var(--accent);}
+.jlpt-bw{flex:1;height:10px;background:var(--locked);border-radius:5px;overflow:hidden;}
+.jlpt-bf{height:100%;border-radius:5px;transition:width .8s ease;}
+.jlpt-n{font-family:'DM Mono',monospace;font-size:.69rem;color:var(--ink3);width:80px;text-align:right;flex-shrink:0;}
+
+/* ── Grammar ── */
+.gi{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:.9rem 1.1rem;margin-bottom:.55rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;transition:border-color .2s;box-shadow:var(--cshadow);}
+.gi:hover{border-color:var(--accent);}
+.gi-l{flex:1;min-width:0;}
+.gi-pat{font-family:'Noto Serif JP',serif;font-size:.95rem;color:var(--ink);margin-bottom:2px;}
+.gi-mean{font-size:.75rem;color:var(--ink3);font-style:italic;}
+.gi-r{display:flex;align-items:center;gap:.75rem;flex-shrink:0;}
+.gi-lv{font-family:'Noto Sans JP',sans-serif;font-size:.7rem;padding:2px 8px;border-radius:10px;background:var(--ag);color:var(--accent);border:1px solid var(--border2);}
+.srs-dots{display:flex;gap:3px;}
+.srs-dot{width:7px;height:7px;border-radius:50%;background:var(--border2);}
+.srs-dot.f{background:var(--known);}
+
+/* ── Log ── */
+.log-form{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;box-shadow:var(--cshadow);}
+.log-form h3{font-family:'Noto Serif JP',serif;font-size:.9rem;font-weight:400;margin-bottom:1rem;color:var(--ink2);}
+.form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.75rem;margin-bottom:.75rem;}
+.fg label{display:block;font-size:.76rem;color:var(--ink2);margin-bottom:4px;}
+.fg input,.fg select,.fg textarea{width:100%;background:var(--bg2);border:1px solid var(--border2);border-radius:5px;padding:.45rem .7rem;font-family:'Noto Sans JP',sans-serif;font-size:.82rem;color:var(--ink);outline:none;transition:border-color .2s;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--accent3);}
+.fg textarea{resize:vertical;min-height:60px;}
+.log-entry{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:.8rem 1.1rem;margin-bottom:.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;animation:fadeUp .25s ease;box-shadow:var(--cshadow);}
+.e-meta{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;}
+.e-type{font-family:'Noto Sans JP',sans-serif;font-size:.72rem;padding:2px 10px;border-radius:20px;}
+.t-game{background:rgba(46,107,107,.15);color:var(--accent3);border:1px solid rgba(46,107,107,.25);}
+.t-immersion{background:rgba(168,85,247,.1);color:#a855f7;border:1px solid rgba(168,85,247,.2);}
+.t-reading{background:rgba(184,134,11,.12);color:var(--accent2);border:1px solid rgba(184,134,11,.25);}
+.t-speaking{background:rgba(192,57,43,.1);color:var(--accent);border:1px solid rgba(192,57,43,.2);}
+.t-other{background:var(--pill);color:var(--ink3);border:1px solid var(--border2);}
+.e-desc{font-size:.8rem;color:var(--ink2);}
+.e-r{display:flex;align-items:center;gap:.75rem;flex-shrink:0;}
+.e-time{font-family:'DM Mono',monospace;font-size:.75rem;color:var(--ink3);}
+.btn-del{background:none;border:none;cursor:pointer;color:var(--ink3);font-size:.85rem;padding:2px 4px;transition:color .2s;}
+.btn-del:hover{color:var(--accent);}
+
+/* ── Kanji grid ── */
+/* Kanji search bar */
+.k-search-wrap{position:relative;margin-bottom:1rem;max-width:520px;}
+.k-search-icon{position:absolute;left:.85rem;top:50%;transform:translateY(-50%);color:var(--ink3);pointer-events:none;}
+.k-search-input{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:7px;padding:.55rem 2.2rem .55rem 2.3rem;font-family:'Noto Sans JP',sans-serif;font-size:.85rem;color:var(--ink);outline:none;transition:border-color .15s;}
+.k-search-input:focus{border-color:var(--accent);}
+.k-search-input::placeholder{color:var(--ink3);}
+.k-search-clear{position:absolute;right:.6rem;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--ink3);font-size:1.1rem;cursor:pointer;padding:.2rem .35rem;line-height:1;border-radius:3px;transition:color .15s, background .15s;}
+.k-search-clear:hover{color:var(--accent);background:var(--pill);}
+
+.k-filters{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.2rem;align-items:center;}
+.k-legend{display:flex;gap:1rem;align-items:center;margin-bottom:1rem;flex-wrap:wrap;}
+.ld{display:flex;align-items:center;gap:5px;font-size:.71rem;color:var(--ink3);}
+.dot{width:10px;height:10px;border-radius:2px;}
+.dot-k{background:var(--known);} .dot-m{background:var(--accent);} .dot-l{background:var(--learning);} .dot-lo{background:var(--locked);border:1px solid var(--border2);}
+.kp-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.1rem 1.25rem;margin-bottom:1.25rem;box-shadow:var(--cshadow);}
+.kp-row{display:flex;align-items:center;gap:1rem;margin-bottom:.55rem;}
+.kp-row:last-child{margin-bottom:0;}
+.kp-lbl{font-family:'Noto Sans JP',sans-serif;font-size:.78rem;color:var(--ink3);width:65px;flex-shrink:0;}
+.kp-bw{flex:1;height:6px;background:var(--locked);border-radius:3px;overflow:hidden;}
+.kp-bf{height:100%;border-radius:3px;transition:width .6s ease;}
+.kp-ct{font-family:'DM Mono',monospace;font-size:.67rem;color:var(--ink3);width:80px;text-align:right;flex-shrink:0;}
+.kanji-grid{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:1.5rem;}
+.kc{width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-family:'Noto Serif JP',serif;font-size:.9rem;border-radius:5px;cursor:pointer;transition:all .15s;position:relative;border:1px solid transparent;user-select:none;}
+.kc.known{background:rgba(46,107,107,.15);color:var(--known);border-color:rgba(46,107,107,.25);}
+[data-theme="dark"] .kc.known{background:rgba(52,211,153,.1);border-color:rgba(52,211,153,.3);box-shadow:0 0 5px rgba(52,211,153,.18);}
+.kc.learning{background:rgba(184,134,11,.12);color:var(--learning);border-color:rgba(184,134,11,.22);}
+[data-theme="dark"] .kc.learning{background:rgba(129,140,248,.1);border-color:rgba(129,140,248,.3);color:var(--learning);}
+.kc.manual{background:rgba(192,57,43,.12);color:var(--accent);border-color:rgba(192,57,43,.22);}
+[data-theme="dark"] .kc.manual{background:rgba(168,85,247,.12);border-color:rgba(168,85,247,.3);box-shadow:0 0 6px rgba(168,85,247,.22);}
+.kc.locked{background:var(--locked);color:var(--ltxt);border-color:transparent;}
+.kc:hover{transform:scale(1.18);z-index:2;border-color:var(--accent);}
+
+/* ── Kanji popup ── */
+.kpop-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;align-items:center;justify-content:center;}
+.kpop-overlay.open{display:flex;}
+.kpop{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;width:420px;max-width:95vw;max-height:85vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.4),var(--cshadow);}
+.kpop-header{display:flex;align-items:flex-start;justify-content:space-between;padding:1.5rem 1.5rem 1rem;border-bottom:1px solid var(--border);}
+.kpop-kanji{font-family:'Noto Serif JP',serif;font-size:4rem;font-weight:200;color:var(--ink);line-height:1;text-shadow:var(--neon);}
+.kpop-meta{flex:1;padding-left:1.25rem;}
+.kpop-meaning{font-size:1rem;font-weight:400;color:var(--ink);margin-bottom:.35rem;font-family:'Noto Serif JP',serif;}
+.kpop-readings{display:flex;flex-direction:column;gap:.3rem;}
+.kpop-reading-row{display:flex;align-items:center;gap:.5rem;}
+.kpop-rtag{font-family:'DM Mono',monospace;font-size:.6rem;padding:1px 7px;border-radius:3px;background:var(--ag);color:var(--accent);border:1px solid var(--border2);flex-shrink:0;letter-spacing:.05em;}
+.kpop-rtag.kun{background:rgba(46,107,107,.12);color:var(--known);}
+[data-theme="dark"] .kpop-rtag.kun{background:rgba(52,211,153,.1);color:var(--known);}
+.kpop-rval{font-family:'Noto Serif JP',serif;font-size:.9rem;color:var(--ink2);}
+.kpop-close{background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--ink3);padding:4px;transition:color .2s;flex-shrink:0;}
+.kpop-close:hover{color:var(--accent);}
+.kpop-body{padding:1rem 1.5rem 1.5rem;}
+.kpop-section-lbl{font-family:'Noto Sans JP',sans-serif;font-size:.78rem;color:var(--ink3);margin-bottom:.6rem;margin-top:.9rem;font-weight:400;}
+.kpop-section-lbl:first-child{margin-top:0;}
+.kpop-words{display:flex;flex-direction:column;gap:.45rem;}
+.kpop-word{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:.6rem .85rem;display:flex;flex-direction:column;gap:.25rem;}
+.kpop-word-jp{font-family:'Noto Serif JP',serif;font-size:1rem;color:var(--ink);}
+.kpop-word-right{display:flex;align-items:baseline;justify-content:space-between;gap:.75rem;flex-wrap:wrap;}
+.kpop-word-read{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--ink3);font-style:italic;flex-shrink:0;}
+.kpop-word-en{font-size:.76rem;color:var(--ink2);line-height:1.4;text-align:right;flex:1;min-width:0;}
+.kpop-status{display:flex;align-items:center;gap:.5rem;margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--border);}
+.kpop-status-dot{width:9px;height:9px;border-radius:50%;}
+.kpop-status-lbl{font-size:.75rem;color:var(--ink3);}
+.kpop-toggle{margin-left:auto;font-size:.72rem;}
+.kpop-jisho{display:block;text-align:center;font-family:'DM Mono',monospace;font-size:.68rem;color:var(--ink3);text-decoration:none;padding:.6rem;border-top:1px solid var(--border);transition:color .2s;}
+.kpop-jisho:hover{color:var(--accent);}
+
+/* ── Anki deck navigator ── */
+.deck-nav{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:1.5rem;box-shadow:var(--cshadow);overflow:hidden;}
+.deck-nav-header{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.25rem;border-bottom:1px solid var(--border);background:var(--bg2);}
+.deck-nav-title{font-family:'Noto Serif JP',serif;font-size:1rem;font-weight:400;color:var(--ink);flex:1;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 .75rem;}
+.deck-nav-arrow{background:none;border:1px solid var(--border2);border-radius:5px;padding:.35rem .7rem;cursor:pointer;color:var(--ink3);font-size:.9rem;transition:all .2s;flex-shrink:0;}
+.deck-nav-arrow:hover{border-color:var(--accent);color:var(--accent);}
+.deck-nav-arrow:disabled{opacity:.3;cursor:default;}
+.deck-nav-body{display:grid;grid-template-columns:repeat(4,1fr);gap:0;}
+.dnb-cell{padding:1rem 1.1rem;text-align:center;border-right:1px solid var(--border);}
+.dnb-cell:last-child{border-right:none;}
+.dnb-val{font-family:'Noto Serif JP',serif;font-size:2rem;font-weight:200;color:var(--ink);line-height:1;}
+.dnb-lbl{font-family:'Noto Sans JP',sans-serif;font-size:.72rem;color:var(--ink3);margin-top:5px;}
+.dnb-new .dnb-val{color:var(--known);}
+.dnb-due .dnb-val{color:var(--accent);}
+.dnb-done .dnb-val{color:var(--accent2);}
+.deck-pager{display:flex;align-items:center;justify-content:center;gap:.35rem;padding:.6rem;border-top:1px solid var(--border);}
+.deck-dot{width:6px;height:6px;border-radius:50%;background:var(--border2);cursor:pointer;transition:background .2s;}
+.deck-dot.active{background:var(--accent);}
+.upcoming-list{padding:.5rem 0;}
+
+/* ── BunPro manual ── */
+.bp-manual{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;box-shadow:var(--cshadow);}
+.bp-manual .note{font-size:.75rem;color:var(--ink3);margin-bottom:1rem;line-height:1.6;padding:.6rem .85rem;background:var(--bg2);border-radius:5px;border-left:2px solid var(--accent2);}
+.bp-inputs{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.75rem;margin-bottom:1rem;}
+.bi label{display:block;font-size:.76rem;color:var(--ink2);margin-bottom:4px;}
+.bi input{width:100%;background:var(--bg2);border:1px solid var(--border2);border-radius:5px;padding:.45rem .7rem;font-family:'DM Mono',monospace;font-size:.9rem;color:var(--ink);outline:none;text-align:center;}
+.bi input:focus{border-color:var(--accent2);}
+.bp-jlpt{margin-top:1rem;}
+.bp-jlpt-row{display:flex;align-items:center;gap:.75rem;margin-bottom:.6rem;}
+.bp-jlpt-tag{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--accent);width:28px;flex-shrink:0;}
+.bp-jlpt-input{width:55px;background:var(--bg2);border:1px solid var(--border2);border-radius:4px;padding:.3rem .5rem;font-family:'DM Mono',monospace;font-size:.78rem;color:var(--ink);outline:none;text-align:center;}
+.bp-jlpt-input:focus{border-color:var(--accent2);}
+.bp-jlpt-bw{flex:1;height:8px;background:var(--locked);border-radius:4px;overflow:hidden;}
+.bp-jlpt-bf{height:100%;border-radius:4px;transition:width .5s ease;}
+.bp-jlpt-total{font-family:'DM Mono',monospace;font-size:.67rem;color:var(--ink3);width:35px;text-align:right;flex-shrink:0;}
+
+/* ── GSM ── */
+.gsm-drop{border:2px dashed var(--border2);border-radius:8px;padding:2.5rem;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:1.25rem;}
+.gsm-drop:hover,.gsm-drop.over{border-color:var(--accent);background:var(--ag);}
+.gsm-drop .di{font-size:1.6rem;opacity:.3;margin-bottom:.5rem;}
+.gsm-drop p{font-size:.82rem;color:var(--ink3);}
+.gsm-drop input[type=file]{display:none;}
+.gsm-game-row{display:flex;align-items:center;justify-content:space-between;padding:.65rem 0;border-bottom:1px solid var(--border);}
+.gsm-game-row:last-child{border-bottom:none;}
+.ggr-name{font-size:.84rem;color:var(--ink2);}
+.ggr-count{font-family:'Noto Serif JP',serif;font-size:1.1rem;color:var(--ink);}
+.ggr-sub{font-family:'DM Mono',monospace;font-size:.65rem;color:var(--ink3);}
+.gsm-mini-bar{height:4px;border-radius:2px;background:var(--accent3);margin-top:4px;transition:width .5s ease;}
+.k-link{color:var(--accent);cursor:pointer;border-bottom:1px dotted var(--accent);transition:opacity .15s;font-family:'Noto Serif JP',serif;}
+.k-link:hover{opacity:.7;}
+
+@media(max-width:900px){
+  .sidebar{display:none;} .main{margin-left:0;padding:1.25rem 1rem 3rem;}
+  .guide{display:none;} .g3{grid-template-columns:1fr 1fr;} .deck-nav-body{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+<div class="guide"></div>
+<div class="app">
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="sidebar">
+  <div class="sb-logo"><h1>日本語<br>学習</h1><div class="sub">Learning Dashboard</div></div>
+  <nav class="sb-nav">
+    <div class="nav-sec">Overview</div>
+    <div class="nav-item active" onclick="go('today')"><span class="nav-icon">今</span>Today</div>
+    <div class="nav-item" onclick="go('weekly')"><span class="nav-icon">週</span>Weekly</div>
+    <div class="nav-sec">Study</div>
+    <div class="nav-item" onclick="go('kanji')"><span class="nav-icon">漢</span>Kanji Grid</div>
+    <div class="nav-item" onclick="go('grammar')"><span class="nav-icon">文</span>Grammar</div>
+    <div class="nav-item" onclick="go('anki')"><span class="nav-icon">牌</span>Anki</div>
+    <div class="nav-item" onclick="go('gsm')"><span class="nav-icon">鉱</span>Game Miner</div>
+    <div class="nav-item" onclick="go('log')"><span class="nav-icon">記</span>Session Log</div>
+  </nav>
+</aside>
+
+<!-- ══ MAIN ══ -->
+<main class="main">
+
+<!-- Floating gear button (always visible top-right) -->
+<button class="gear-btn" id="gear-btn" onclick="openM('m-setup')" title="Settings" aria-label="Settings">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="3"/>
+    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+  </svg>
+</button>
+
+<!-- Settings modal (sectioned) -->
+<div class="mo" id="m-setup">
+  <div class="modal modal-wide">
+    <div class="modal-head">
+      <h2>設定 · Settings</h2>
+      <button class="modal-close" onclick="closeM('m-setup')" aria-label="Close">×</button>
+    </div>
+
+    <!-- Section: API keys -->
+    <div class="settings-section">
+      <h3 class="settings-h3">API Keys</h3>
+      <div class="field"><label>WaniKani API Token</label><input type="password" id="wk-key" placeholder="wk-..."></div>
+      <div class="field"><label>AnkiConnect URL</label><input type="text" id="anki-url" placeholder="http://localhost:8765"></div>
+      <p class="settings-note">BunPro stats are entered manually in the Grammar tab — their public API isn't released yet.</p>
+    </div>
+
+    <!-- Section: Theme -->
+    <div class="settings-section">
+      <h3 class="settings-h3">Theme</h3>
+      <div class="theme-options">
+        <button class="theme-opt" data-theme-val="washi" onclick="setTheme('washi',this)">
+          <div class="theme-preview" style="background:#f5f0e8;border:1px solid #e0d5c0;">
+            <div style="background:#c0392b;width:8px;height:8px;border-radius:50%;margin:6px;"></div>
+          </div>
+          <div class="theme-name">Washi · 和紙</div>
+          <div class="theme-desc">Light, paper-like</div>
+        </button>
+        <button class="theme-opt" data-theme-val="dark" onclick="setTheme('dark',this)">
+          <div class="theme-preview" style="background:#16161a;border:1px solid rgba(255,255,255,.1);">
+            <div style="background:#d4795b;width:8px;height:8px;border-radius:50%;margin:6px;"></div>
+          </div>
+          <div class="theme-name">Dark · 闇</div>
+          <div class="theme-desc">Calm dark mode</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Section: About -->
+    <div class="settings-section">
+      <h3 class="settings-h3">About</h3>
+      <p class="settings-note">
+        日本語 Dashboard · v0.9<br>
+        A personal Japanese learning dashboard.<br>
+        <a href="https://github.com" target="_blank" style="color:var(--accent);text-decoration:none;">View on GitHub →</a>
+      </p>
+      <p class="settings-note" style="margin-top:.6rem;font-size:.7rem;opacity:.8;">
+        This is a third-party app and is not created or managed by the WaniKani team. By using it, you understand that it can stop working at any time or be discontinued indefinitely.
+      </p>
+    </div>
+
+    <div class="mo-actions">
+      <button class="btn btn-ghost" onclick="closeM('m-setup')">Close</button>
+      <button class="btn btn-r" onclick="saveKeys()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Kanji popup -->
+<div class="kpop-overlay" id="kpop-overlay" onclick="if(event.target===this)closeKpop()">
+  <div class="kpop" id="kpop"></div>
+</div>
+
+<!-- ══ TODAY ══ -->
+<div class="view active" id="view-today">
+  <div class="ph">
+    <div><div class="ph-title">今日 · Today</div><div class="ph-sub" id="date-stamp"></div></div>
+    <div class="ph-actions"><div class="seal">学</div></div>
+  </div>
+  <div class="fact-card" id="daily-fact"></div>
+  <div class="streak-banner">
+    <div class="s-num" id="streak-num">—</div>
+    <div class="s-txt"><h3>Day Streak</h3><p id="streak-sub">Log a session to keep your streak alive.</p></div>
+  </div>
+  <div class="sec-head"><h2>⛩ WaniKani</h2><span id="wk-lv-badge"></span></div>
+  <div class="g3">
+    <div class="card ac-r" data-k="復"><div class="cs">WaniKani</div><div class="cv" id="wk-reviews">—</div><div class="cl">Reviews available</div></div>
+    <div class="card ac-r" data-k="新"><div class="cs">WaniKani</div><div class="cv" id="wk-lessons">—</div><div class="cl">Lessons available</div></div>
+    <div class="card ac-r" data-k="焼"><div class="cs">WaniKani · burned</div><div class="cv" id="wk-burned">—</div><div class="cl">Total items burned</div></div>
+  </div>
+  <div class="card" style="margin-bottom:1.5rem;" data-k="次"><div class="cs">WaniKani · upcoming</div><div id="wk-upcoming" style="margin-top:.5rem;"><div class="loading-pill">Loading…</div></div></div>
+
+  <!-- Cumulative WK stats (review_statistics endpoint) -->
+  <div class="g3" style="margin-bottom:1.5rem;">
+    <div class="card ac-r" data-k="計"><div class="cs">WaniKani · cumulative</div><div class="cv" id="wk-total-reviews">—</div><div class="cl">Total reviews ever</div></div>
+    <div class="card ac-r" data-k="率"><div class="cs">WaniKani · cumulative</div><div class="cv" id="wk-accuracy">—</div><div class="cl">Overall accuracy</div></div>
+    <div class="card ac-r" data-k="続"><div class="cs">WaniKani · cumulative</div><div class="cv" id="wk-streak">—</div><div class="cl">Best correct streak</div></div>
+  </div>
+
+  <hr class="dv">
+  <div class="sec-head"><h2>今日の記録 · Today's Sessions</h2><span id="today-total"></span></div>
+  <div id="today-log-list"></div>
+</div>
+
+<!-- ══ WEEKLY ══ -->
+<div class="view" id="view-weekly">
+  <div class="ph"><div><div class="ph-title">週間 · Weekly</div><div class="ph-sub" id="week-range"></div></div></div>
+  <div class="bars-wrap">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem;">
+      <button class="deck-nav-arrow" onclick="moveWeekTab(-1)">←</button>
+      <div style="text-align:center;">
+        <div id="week-tab-label" style="font-family:'Noto Serif JP',serif;font-size:.95rem;color:var(--accent);">Session minutes</div>
+        <div id="week-tab-sub" style="font-family:'DM Mono',monospace;font-size:.6rem;color:var(--ink3);margin-top:2px;">manual log entries</div>
+      </div>
+      <button class="deck-nav-arrow" onclick="moveWeekTab(1)">→</button>
+    </div>
+    <div class="bars" id="week-bars"></div>
+    <div class="deck-pager" id="week-tab-pager" style="margin-top:.5rem;border-top:none;padding:0;"></div>
+  </div>
+  <div class="g3">
+    <div class="card ac-t" data-k="時"><div class="cs">This week</div><div class="cv" id="week-total">0</div><div class="cl">Total minutes</div></div>
+    <div class="card ac-t" data-k="日"><div class="cs">This week</div><div class="cv" id="week-days">0</div><div class="cl">Active days</div></div>
+    <div class="card ac-t" data-k="均"><div class="cs">This week</div><div class="cv" id="week-avg">0</div><div class="cl">Avg min / day</div></div>
+  </div>
+  <div class="sec-head"><h2>Session breakdown</h2></div>
+  <div class="card" id="week-breakdown" style="padding:1.1rem 1.25rem;"></div>
+</div>
+
+<!-- ══ KANJI ══ -->
+<div class="view" id="view-kanji">
+  <div class="ph">
+    <div><div class="ph-title">漢字 · Kanji Grid</div><div class="ph-sub">All 2136 Jōyō · click any kanji for details</div></div>
+    <div class="ph-actions"><button class="btn btn-t" onclick="syncWKKanji()" id="wk-sync-btn">⟳ Sync WK</button></div>
+  </div>
+  <!-- Kanji search bar -->
+  <div class="k-search-wrap">
+    <svg class="k-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="7"/>
+      <path d="m21 21-4.3-4.3"/>
+    </svg>
+    <input type="text" id="k-search" class="k-search-input" placeholder="Search kanji or English meaning… (e.g. 海, sea, water)" oninput="onKanjiSearch(this.value)">
+    <button class="k-search-clear" id="k-search-clear" onclick="clearKanjiSearch()" style="display:none;" aria-label="Clear">×</button>
+  </div>
+
+  <div class="k-filters" id="k-filters">
+    <span style="font-family:'DM Mono',monospace;font-size:.63rem;color:var(--ink3);letter-spacing:.1em;">LIST:</span>
+    <div class="fp active" onclick="setKF('joyo',this)">Jōyō (2136)</div>
+    <div class="fp" onclick="setKF('n5',this)">N5 (103)</div>
+    <div class="fp" onclick="setKF('n4',this)">N4 (181)</div>
+    <div class="fp" onclick="setKF('n3',this)">N3 (200)</div>
+    <div class="fp" onclick="setKF('n2',this)">N2 (539)</div>
+    <div class="fp" onclick="setKF('n1',this)">N1 (1207)</div>
+  </div>
+  <div class="k-legend">
+    <div class="ld"><div class="dot dot-k"></div>WK passed/burned</div>
+    <div class="ld"><div class="dot dot-m"></div>Manually known</div>
+    <div class="ld"><div class="dot dot-l"></div>WK in progress</div>
+    <div class="ld"><div class="dot dot-lo"></div>Not started</div>
+  </div>
+  <div class="kp-card" id="kp-bars"></div>
+  <div class="kanji-grid" id="kanji-grid"></div>
+</div>
+
+<!-- ══ GRAMMAR ══ -->
+<div class="view" id="view-grammar">
+  <div class="ph"><div><div class="ph-title">文法 · Grammar</div><div class="ph-sub">Manual tracking · BunPro API coming soon</div></div></div>
+
+  <!-- BunPro manual input -->
+  <div class="bp-manual">
+    <div class="note">BunPro's public API is not yet available. Enter your stats manually below — they save automatically.</div>
+    <div class="bp-inputs">
+      <div class="bi"><label>Reviews Due</label><input type="number" id="bp-in-reviews" placeholder="0" oninput="saveBP()"></div>
+      <div class="bi"><label>Grammar Points</label><input type="number" id="bp-in-studied" placeholder="0" oninput="saveBP()"></div>
+      <div class="bi"><label>Ghost Reviews</label><input type="number" id="bp-in-ghost" placeholder="0" oninput="saveBP()"></div>
+      <div class="bi"><label>Day Streak 🔥</label><input type="number" id="bp-in-streak" placeholder="0" oninput="saveBP()"></div>
+    </div>
+    <div class="bp-jlpt" id="bp-jlpt-inputs"></div>
+    <div style="margin-top:.75rem;display:flex;justify-content:flex-end;">
+      <button class="btn btn-g btn-sm" onclick="syncBPToCards()">↑ Update cards</button>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="card" style="padding:1.25rem 1.5rem;">
+      <div class="cs" style="margin-bottom:1rem;">JLPT Level Progress</div>
+      <div class="jlpt-bars" id="jlpt-bars"></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem;">
+      <div class="card ac-g" data-k="文"><div class="cs">BunPro</div><div class="cv" id="bp-card-studied">—</div><div class="cl">Grammar points studied</div></div>
+      <div class="card ac-r" data-k="次"><div class="cs">BunPro</div><div class="cv" id="bp-card-reviews">—</div><div class="cl">Reviews due now</div></div>
+      <div class="card ac-t" data-k="幽"><div class="cs">BunPro</div><div class="cv" id="bp-card-ghost">—</div><div class="cl">Ghost reviews</div></div>
+    </div>
+  </div>
+
+  <div class="sec-head"><h2>Recent grammar points</h2></div>
+  <div id="grammar-list"></div>
+</div>
+
+<!-- ══ ANKI ══ -->
+<div class="view" id="view-anki">
+  <div class="ph">
+    <div><div class="ph-title">牌 · Anki</div><div class="ph-sub">Per-deck stats via AnkiConnect</div></div>
+    <div class="ph-actions">
+      <button class="btn btn-t" onclick="fetchAnki()">⟳ Refresh</button>
+    </div>
+  </div>
+
+  <!-- Deck navigator -->
+  <div class="deck-nav" id="deck-nav">
+    <div class="deck-nav-header">
+      <button class="deck-nav-arrow" id="deck-prev" onclick="moveDeck(-1)">←</button>
+      <div class="deck-nav-title" id="deck-title">Loading…</div>
+      <button class="deck-nav-arrow" id="deck-next" onclick="moveDeck(1)">→</button>
+    </div>
+    <div class="deck-nav-body">
+      <div class="dnb-cell dnb-done"><div class="dnb-val" id="d-done">—</div><div class="dnb-lbl">Reviewed today</div></div>
+      <div class="dnb-cell dnb-new"><div class="dnb-val" id="d-new">—</div><div class="dnb-lbl">New</div></div>
+      <div class="dnb-cell dnb-due"><div class="dnb-val" id="d-due">—</div><div class="dnb-lbl">Due</div></div>
+      <div class="dnb-cell"><div class="dnb-val" id="d-total">—</div><div class="dnb-lbl">Total cards</div></div>
+    </div>
+    <div class="deck-pager" id="deck-pager"></div>
+  </div>
+
+  <!-- Upcoming reviews for current deck -->
+  <div class="sec-head"><h2>Upcoming reviews</h2><span id="deck-upcoming-label"></span></div>
+  <div class="card" id="deck-upcoming" style="padding:1rem 1.25rem;"><div class="loading-pill">…</div></div>
+
+  <!-- 7-day bar chart -->
+  <div class="sec-head" style="margin-top:1.5rem;"><h2>Collection · 7-day activity</h2></div>
+  <div class="bars-wrap">
+    <div style="font-size:.78rem;color:var(--ink3);">Cards reviewed per day</div>
+    <div class="bars" id="anki-bars"></div>
+  </div>
+
+  <!-- Error -->
+  <div id="anki-error" style="display:none;" class="card">
+    <p style="font-size:.82rem;color:var(--accent);">⚠ Could not connect to AnkiConnect.</p>
+    <p style="font-size:.75rem;color:var(--ink3);margin-top:.4rem;">Make sure Anki is open. In AnkiConnect config, add <span style="font-family:'DM Mono',monospace;">http://localhost:8080</span> to <span style="font-family:'DM Mono',monospace;">webCorsOriginList</span>, then restart Anki.</p>
+  </div>
+</div>
+
+<!-- ══ GSM ══ -->
+<div class="view" id="view-gsm">
+  <div class="ph"><div><div class="ph-title">鉱 · Game Sentence Miner</div><div class="ph-sub">Import your GSM export CSV</div></div></div>
+  <div class="g3">
+    <div class="card ac-t" data-k="鉱"><div class="cs">GSM · total</div><div class="cv" id="gsm-total">—</div><div class="cl">Cards mined</div></div>
+    <div class="card ac-r" data-k="遊"><div class="cs">GSM</div><div class="cv" id="gsm-games">—</div><div class="cl">Games tracked</div></div>
+    <div class="card ac-g" data-k="日"><div class="cs">GSM</div><div class="cv" id="gsm-last">—</div><div class="cl">Most recent game</div></div>
+  </div>
+  <div class="gsm-drop" id="gsm-drop" onclick="document.getElementById('gsm-file').click()" ondragover="event.preventDefault();this.classList.add('over')" ondragleave="this.classList.remove('over')" ondrop="handleGSMDrop(event)">
+    <div class="di">📂</div>
+    <p>Drop your GSM export CSV here, or click to browse</p>
+    <p style="font-size:.72rem;margin-top:.35rem;opacity:.6;">Columns auto-detected: sentence, game/source, date, word</p>
+    <input type="file" id="gsm-file" accept=".csv" onchange="handleGSMFile(event)">
+  </div>
+  <div class="sec-head"><h2>By game</h2><span id="gsm-game-count"></span></div>
+  <div class="card" id="gsm-game-list" style="padding:1rem 1.25rem;"><div class="empty-s"><span class="ei">🎮</span>Import a CSV above to see your stats.</div></div>
+  <div class="sec-head" style="margin-top:1.5rem;"><h2>Mining timeline (14 days)</h2></div>
+  <div class="bars-wrap"><div style="font-size:.78rem;color:var(--ink3);">Cards mined per day</div><div class="bars" style="height:110px;" id="gsm-bars"></div></div>
+  <button class="btn btn-ghost" style="margin-top:.5rem;" onclick="clearGSM()">Clear GSM data</button>
+</div>
+
+<!-- ══ LOG ══ -->
+<div class="view" id="view-log">
+  <div class="ph"><div><div class="ph-title">記録 · Session Log</div><div class="ph-sub">Track all your study sessions</div></div></div>
+  <div class="log-form">
+    <h3>記録する · Add a session</h3>
+    <div class="form-row">
+      <div class="fg"><label>Type</label>
+        <select id="log-type">
+          <option value="game">🎮 Game Mining</option>
+          <option value="immersion">🎧 Immersion</option>
+          <option value="reading">📖 Reading</option>
+          <option value="speaking">🗣 Speaking</option>
+          <option value="other">✏ Other</option>
+        </select>
+      </div>
+      <div class="fg"><label>Duration (min)</label><input type="number" id="log-dur" min="1" placeholder="45"></div>
+      <div class="fg"><label>Date</label><input type="date" id="log-date"></div>
+    </div>
+    <div class="form-row">
+      <div class="fg" style="grid-column:1/-1;"><label>Notes</label><textarea id="log-notes" placeholder="e.g. Persona 5 — mined 12 cards on ばかり"></textarea></div>
+    </div>
+    <button class="btn btn-t" onclick="addLog()">+ Add Session</button>
+  </div>
+  <div class="sec-head"><h2>全記録 · All Sessions</h2><span id="all-count"></span></div>
+  <div id="all-log-list"></div>
+</div>
+
+<footer style="margin-top:3rem;padding:1rem 0;border-top:1px solid var(--border);font-size:.7rem;color:var(--ink3);line-height:1.6;text-align:center;">
+  This is a third-party app and is not created or managed by the WaniKani team.<br>
+  By using it, you understand that it can stop working at any time or be discontinued indefinitely.
+</footer>
+
+</main>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+//  KANJI DATABASE (readings + meanings + words)
+// ══════════════════════════════════════════
+// Format: char -> { on, kun, meaning, words: [{w, r, e}] }
+const KDB = {
+'日':{on:'ニチ・ジツ',kun:'ひ・か',meaning:'sun, day',words:[{w:'日本',r:'にほん',e:'Japan'},{w:'毎日',r:'まいにち',e:'every day'},{w:'日曜日',r:'にちようび',e:'Sunday'},{w:'今日',r:'きょう',e:'today'}]},
+'月':{on:'ゲツ・ガツ',kun:'つき',meaning:'moon, month',words:[{w:'月曜日',r:'げつようび',e:'Monday'},{w:'今月',r:'こんげつ',e:'this month'},{w:'月光',r:'げっこう',e:'moonlight'}]},
+'火':{on:'カ',kun:'ひ',meaning:'fire',words:[{w:'火曜日',r:'かようび',e:'Tuesday'},{w:'花火',r:'はなび',e:'fireworks'},{w:'火事',r:'かじ',e:'fire (disaster)'}]},
+'水':{on:'スイ',kun:'みず',meaning:'water',words:[{w:'水曜日',r:'すいようび',e:'Wednesday'},{w:'水泳',r:'すいえい',e:'swimming'},{w:'水道',r:'すいどう',e:'waterworks'}]},
+'木':{on:'モク・ボク',kun:'き・こ',meaning:'tree, wood',words:[{w:'木曜日',r:'もくようび',e:'Thursday'},{w:'木村',r:'きむら',e:'Kimura (name)'},{w:'木材',r:'もくざい',e:'lumber'}]},
+'金':{on:'キン・コン',kun:'かね・かな',meaning:'gold, money',words:[{w:'金曜日',r:'きんようび',e:'Friday'},{w:'お金',r:'おかね',e:'money'},{w:'金魚',r:'きんぎょ',e:'goldfish'}]},
+'土':{on:'ド・ト',kun:'つち',meaning:'earth, soil',words:[{w:'土曜日',r:'どようび',e:'Saturday'},{w:'土地',r:'とち',e:'land'},{w:'土台',r:'どだい',e:'foundation'}]},
+'山':{on:'サン',kun:'やま',meaning:'mountain',words:[{w:'山田',r:'やまだ',e:'Yamada (name)'},{w:'登山',r:'とざん',e:'mountain climbing'},{w:'富士山',r:'ふじさん',e:'Mt. Fuji'}]},
+'川':{on:'セン',kun:'かわ',meaning:'river',words:[{w:'川口',r:'かわぐち',e:'Kawaguchi (name)'},{w:'河川',r:'かせん',e:'rivers (formal)'}]},
+'人':{on:'ジン・ニン',kun:'ひと',meaning:'person',words:[{w:'人間',r:'にんげん',e:'human being'},{w:'人気',r:'にんき',e:'popularity'},{w:'外国人',r:'がいこくじん',e:'foreigner'}]},
+'子':{on:'シ・ス',kun:'こ',meaning:'child',words:[{w:'子供',r:'こども',e:'child'},{w:'女の子',r:'おんなのこ',e:'girl'},{w:'子育て',r:'こそだて',e:'child-rearing'}]},
+'女':{on:'ジョ・ニョ',kun:'おんな・め',meaning:'woman',words:[{w:'女性',r:'じょせい',e:'woman (formal)'},{w:'彼女',r:'かのじょ',e:'she / girlfriend'},{w:'女優',r:'じょゆう',e:'actress'}]},
+'男':{on:'ダン・ナン',kun:'おとこ',meaning:'man, male',words:[{w:'男性',r:'だんせい',e:'man (formal)'},{w:'男優',r:'だんゆう',e:'actor'},{w:'長男',r:'ちょうなん',e:'eldest son'}]},
+'学':{on:'ガク',kun:'まな-ぶ',meaning:'study, learning',words:[{w:'学校',r:'がっこう',e:'school'},{w:'大学',r:'だいがく',e:'university'},{w:'学生',r:'がくせい',e:'student'}]},
+'先':{on:'セン',kun:'さき',meaning:'ahead, previous',words:[{w:'先生',r:'せんせい',e:'teacher'},{w:'先週',r:'せんしゅう',e:'last week'},{w:'先輩',r:'せんぱい',e:'senior'}]},
+'生':{on:'セイ・ショウ',kun:'い-きる・う-む・なま',meaning:'life, birth, raw',words:[{w:'学生',r:'がくせい',e:'student'},{w:'先生',r:'せんせい',e:'teacher'},{w:'生活',r:'せいかつ',e:'life / living'}]},
+'年':{on:'ネン',kun:'とし',meaning:'year',words:[{w:'今年',r:'ことし',e:'this year'},{w:'来年',r:'らいねん',e:'next year'},{w:'年齢',r:'ねんれい',e:'age'}]},
+'時':{on:'ジ',kun:'とき',meaning:'time, hour',words:[{w:'時間',r:'じかん',e:'time'},{w:'時計',r:'とけい',e:'clock/watch'},{w:'時々',r:'ときどき',e:'sometimes'}]},
+'間':{on:'カン・ケン',kun:'あいだ・ま',meaning:'interval, between',words:[{w:'時間',r:'じかん',e:'time'},{w:'人間',r:'にんげん',e:'human'},{w:'間違い',r:'まちがい',e:'mistake'}]},
+'国':{on:'コク',kun:'くに',meaning:'country',words:[{w:'外国',r:'がいこく',e:'foreign country'},{w:'国語',r:'こくご',e:'national language'},{w:'国際',r:'こくさい',e:'international'}]},
+'語':{on:'ゴ',kun:'かた-る',meaning:'language, word',words:[{w:'日本語',r:'にほんご',e:'Japanese language'},{w:'英語',r:'えいご',e:'English'},{w:'物語',r:'ものがたり',e:'story'}]},
+'本':{on:'ホン',kun:'もと',meaning:'book, origin',words:[{w:'日本',r:'にほん',e:'Japan'},{w:'本当',r:'ほんとう',e:'truth / really'},{w:'本屋',r:'ほんや',e:'bookstore'}]},
+'食':{on:'ショク・ジキ',kun:'た-べる・く-う',meaning:'eat, food',words:[{w:'食べ物',r:'たべもの',e:'food'},{w:'食事',r:'しょくじ',e:'meal'},{w:'食堂',r:'しょくどう',e:'cafeteria'}]},
+'飲':{on:'イン',kun:'の-む',meaning:'drink',words:[{w:'飲み物',r:'のみもの',e:'drink/beverage'},{w:'飲食',r:'いんしょく',e:'eating and drinking'},{w:'飲み会',r:'のみかい',e:'drinking party'}]},
+'見':{on:'ケン',kun:'み-る・み-える',meaning:'see, look',words:[{w:'見物',r:'けんぶつ',e:'sightseeing'},{w:'意見',r:'いけん',e:'opinion'},{w:'見学',r:'けんがく',e:'field trip'}]},
+'聞':{on:'ブン・モン',kun:'き-く・き-こえる',meaning:'hear, listen',words:[{w:'新聞',r:'しんぶん',e:'newspaper'},{w:'聞こえる',r:'きこえる',e:'to be audible'},{w:'見聞',r:'けんぶん',e:'knowledge'}]},
+'読':{on:'ドク・トク',kun:'よ-む',meaning:'read',words:[{w:'読書',r:'どくしょ',e:'reading (books)'},{w:'読者',r:'どくしゃ',e:'reader'},{w:'音読',r:'おんどく',e:'reading aloud'}]},
+'書':{on:'ショ',kun:'か-く',meaning:'write',words:[{w:'書道',r:'しょどう',e:'calligraphy'},{w:'辞書',r:'じしょ',e:'dictionary'},{w:'書類',r:'しょるい',e:'documents'}]},
+'話':{on:'ワ',kun:'はな-す・はなし',meaning:'speak, talk',words:[{w:'電話',r:'でんわ',e:'telephone'},{w:'会話',r:'かいわ',e:'conversation'},{w:'話題',r:'わだい',e:'topic'}]},
+'来':{on:'ライ',kun:'く-る・き-たる',meaning:'come',words:[{w:'来年',r:'らいねん',e:'next year'},{w:'来週',r:'らいしゅう',e:'next week'},{w:'将来',r:'しょうらい',e:'future'}]},
+'行':{on:'コウ・ギョウ',kun:'い-く・おこな-う',meaning:'go, conduct',words:[{w:'銀行',r:'ぎんこう',e:'bank'},{w:'旅行',r:'りょこう',e:'travel'},{w:'行動',r:'こうどう',e:'action/behavior'}]},
+'出':{on:'シュツ・スイ',kun:'で-る・だ-す',meaning:'exit, come out',words:[{w:'出口',r:'でぐち',e:'exit'},{w:'出発',r:'しゅっぱつ',e:'departure'},{w:'提出',r:'ていしゅつ',e:'submission'}]},
+'入':{on:'ニュウ',kun:'い-る・はい-る',meaning:'enter',words:[{w:'入口',r:'いりぐち',e:'entrance'},{w:'入学',r:'にゅうがく',e:'school enrollment'},{w:'収入',r:'しゅうにゅう',e:'income'}]},
+'上':{on:'ジョウ・ショウ',kun:'うえ・うわ・あ-げる',meaning:'above, up',words:[{w:'上手',r:'じょうず',e:'skilled'},{w:'上着',r:'うわぎ',e:'jacket'},{w:'以上',r:'いじょう',e:'more than / above'}]},
+'下':{on:'カ・ゲ',kun:'した・しも・お-りる',meaning:'below, down',words:[{w:'地下',r:'ちか',e:'underground'},{w:'下手',r:'へた',e:'unskilled'},{w:'以下',r:'いか',e:'less than / below'}]},
+'大':{on:'ダイ・タイ',kun:'おお-きい',meaning:'big, large',words:[{w:'大学',r:'だいがく',e:'university'},{w:'大人',r:'おとな',e:'adult'},{w:'大切',r:'たいせつ',e:'important'}]},
+'小':{on:'ショウ',kun:'ちい-さい・こ・お',meaning:'small, little',words:[{w:'小学校',r:'しょうがっこう',e:'elementary school'},{w:'小説',r:'しょうせつ',e:'novel'},{w:'小鳥',r:'ことり',e:'small bird'}]},
+'高':{on:'コウ',kun:'たか-い',meaning:'high, tall, expensive',words:[{w:'高校',r:'こうこう',e:'high school'},{w:'高齢',r:'こうれい',e:'old age'},{w:'高速',r:'こうそく',e:'high speed'}]},
+'安':{on:'アン',kun:'やす-い',meaning:'cheap, easy, peace',words:[{w:'安心',r:'あんしん',e:'relief / peace of mind'},{w:'安全',r:'あんぜん',e:'safety'},{w:'不安',r:'ふあん',e:'anxiety'}]},
+'新':{on:'シン',kun:'あたら-しい・あら-',meaning:'new',words:[{w:'新聞',r:'しんぶん',e:'newspaper'},{w:'新幹線',r:'しんかんせん',e:'shinkansen'},{w:'新年',r:'しんねん',e:'new year'}]},
+'古':{on:'コ',kun:'ふる-い',meaning:'old',words:[{w:'古代',r:'こだい',e:'ancient times'},{w:'古典',r:'こてん',e:'classic/classics'},{w:'中古',r:'ちゅうこ',e:'used / secondhand'}]},
+'長':{on:'チョウ',kun:'なが-い',meaning:'long, chief',words:[{w:'社長',r:'しゃちょう',e:'company president'},{w:'校長',r:'こうちょう',e:'school principal'},{w:'長所',r:'ちょうしょ',e:'strong point'}]},
+'短':{on:'タン',kun:'みじか-い',meaning:'short, brief',words:[{w:'短所',r:'たんしょ',e:'weak point'},{w:'短期',r:'たんき',e:'short term'},{w:'短縮',r:'たんしゅく',e:'shortening'}]},
+'白':{on:'ハク・ビャク',kun:'しろ・しら',meaning:'white',words:[{w:'白黒',r:'しろくろ',e:'black and white'},{w:'告白',r:'こくはく',e:'confession'},{w:'白紙',r:'はくし',e:'blank paper'}]},
+'黒':{on:'コク',kun:'くろ',meaning:'black',words:[{w:'黒板',r:'こくばん',e:'blackboard'},{w:'黒字',r:'くろじ',e:'surplus / profit'},{w:'暗黒',r:'あんこく',e:'darkness'}]},
+'赤':{on:'セキ・シャク',kun:'あか',meaning:'red',words:[{w:'赤ちゃん',r:'あかちゃん',e:'baby'},{w:'赤道',r:'せきどう',e:'equator'},{w:'赤字',r:'あかじ',e:'deficit'}]},
+'青':{on:'セイ・ショウ',kun:'あお',meaning:'blue, green, young',words:[{w:'青春',r:'せいしゅん',e:'youth'},{w:'青空',r:'あおぞら',e:'blue sky'},{w:'青信号',r:'あおしんごう',e:'green light'}]},
+'心':{on:'シン',kun:'こころ',meaning:'heart, mind',words:[{w:'安心',r:'あんしん',e:'peace of mind'},{w:'心配',r:'しんぱい',e:'worry'},{w:'中心',r:'ちゅうしん',e:'center'}]},
+'気':{on:'キ・ケ',kun:'',meaning:'spirit, energy, feeling',words:[{w:'天気',r:'てんき',e:'weather'},{w:'気持ち',r:'きもち',e:'feeling'},{w:'人気',r:'にんき',e:'popularity'}]},
+'力':{on:'リョク・リキ',kun:'ちから',meaning:'power, strength',words:[{w:'努力',r:'どりょく',e:'effort'},{w:'電力',r:'でんりょく',e:'electric power'},{w:'体力',r:'たいりょく',e:'physical strength'}]},
+'手':{on:'シュ',kun:'て',meaning:'hand',words:[{w:'手紙',r:'てがみ',e:'letter'},{w:'手術',r:'しゅじゅつ',e:'surgery'},{w:'握手',r:'あくしゅ',e:'handshake'}]},
+'目':{on:'モク・ボク',kun:'め・ま',meaning:'eye',words:[{w:'目的',r:'もくてき',e:'purpose'},{w:'注目',r:'ちゅうもく',e:'attention'},{w:'科目',r:'かもく',e:'school subject'}]},
+'口':{on:'コウ・ク',kun:'くち',meaning:'mouth, opening',words:[{w:'入口',r:'いりぐち',e:'entrance'},{w:'人口',r:'じんこう',e:'population'},{w:'口語',r:'こうご',e:'spoken language'}]},
+'足':{on:'ソク',kun:'あし・た-りる',meaning:'foot, leg, sufficient',words:[{w:'足りる',r:'たりる',e:'to be sufficient'},{w:'遠足',r:'えんそく',e:'excursion'},{w:'土足',r:'どそく',e:'shoes on indoors'}]},
+'耳':{on:'ジ',kun:'みみ',meaning:'ear',words:[{w:'耳鼻科',r:'じびか',e:'ENT (ear/nose/throat)'},{w:'耳打ち',r:'みみうち',e:'whisper'}]},
+'頭':{on:'トウ・ズ',kun:'あたま',meaning:'head',words:[{w:'頭痛',r:'ずつう',e:'headache'},{w:'先頭',r:'せんとう',e:'front / lead'},{w:'頭脳',r:'ずのう',e:'brain / intellect'}]},
+'体':{on:'タイ・テイ',kun:'からだ',meaning:'body',words:[{w:'体育',r:'たいいく',e:'physical education'},{w:'体験',r:'たいけん',e:'experience'},{w:'肉体',r:'にくたい',e:'physical body'}]},
+'電':{on:'デン',kun:'',meaning:'electricity',words:[{w:'電話',r:'でんわ',e:'telephone'},{w:'電車',r:'でんしゃ',e:'train'},{w:'電気',r:'でんき',e:'electricity / light'}]},
+'車':{on:'シャ',kun:'くるま',meaning:'car, wheel',words:[{w:'電車',r:'でんしゃ',e:'train'},{w:'自動車',r:'じどうしゃ',e:'automobile'},{w:'駐車場',r:'ちゅうしゃじょう',e:'parking lot'}]},
+'道':{on:'ドウ・トウ',kun:'みち',meaning:'road, way',words:[{w:'道路',r:'どうろ',e:'road'},{w:'武道',r:'ぶどう',e:'martial arts'},{w:'書道',r:'しょどう',e:'calligraphy'}]},
+'町':{on:'チョウ',kun:'まち',meaning:'town',words:[{w:'下町',r:'したまち',e:'old downtown'},{w:'町長',r:'ちょうちょう',e:'town mayor'}]},
+'村':{on:'ソン',kun:'むら',meaning:'village',words:[{w:'村長',r:'そんちょう',e:'village head'},{w:'農村',r:'のうそん',e:'farming village'}]},
+'東':{on:'トウ',kun:'ひがし',meaning:'east',words:[{w:'東京',r:'とうきょう',e:'Tokyo'},{w:'東洋',r:'とうよう',e:'the East / Orient'},{w:'東南',r:'とうなん',e:'southeast'}]},
+'西':{on:'セイ・サイ',kun:'にし',meaning:'west',words:[{w:'西洋',r:'せいよう',e:'the West'},{w:'関西',r:'かんさい',e:'Kansai region'},{w:'西南',r:'せいなん',e:'southwest'}]},
+'南':{on:'ナン・ナ',kun:'みなみ',meaning:'south',words:[{w:'南北',r:'なんぼく',e:'north and south'},{w:'南米',r:'なんべい',e:'South America'}]},
+'北':{on:'ホク',kun:'きた',meaning:'north',words:[{w:'北海道',r:'ほっかいどう',e:'Hokkaido'},{w:'北部',r:'ほくぶ',e:'northern part'},{w:'南北',r:'なんぼく',e:'north and south'}]},
+'天':{on:'テン',kun:'あめ・あま',meaning:'sky, heaven',words:[{w:'天気',r:'てんき',e:'weather'},{w:'天国',r:'てんごく',e:'heaven/paradise'},{w:'天才',r:'てんさい',e:'genius'}]},
+'空':{on:'クウ',kun:'そら・あ-く',meaning:'sky, empty',words:[{w:'空港',r:'くうこう',e:'airport'},{w:'空気',r:'くうき',e:'air/atmosphere'},{w:'青空',r:'あおぞら',e:'blue sky'}]},
+'海':{on:'カイ',kun:'うみ',meaning:'sea, ocean',words:[{w:'海外',r:'かいがい',e:'overseas'},{w:'海岸',r:'かいがん',e:'coastline'},{w:'北海道',r:'ほっかいどう',e:'Hokkaido'}]},
+'雨':{on:'ウ',kun:'あめ・あま',meaning:'rain',words:[{w:'大雨',r:'おおあめ',e:'heavy rain'},{w:'梅雨',r:'つゆ',e:'rainy season'},{w:'雨季',r:'うき',e:'rainy season'}]},
+'雪':{on:'セツ',kun:'ゆき',meaning:'snow',words:[{w:'雪山',r:'ゆきやま',e:'snowy mountain'},{w:'積雪',r:'せきせつ',e:'accumulated snow'},{w:'雪国',r:'ゆきぐに',e:'snow country'}]},
+'花':{on:'カ・ケ',kun:'はな',meaning:'flower',words:[{w:'花見',r:'はなみ',e:'cherry blossom viewing'},{w:'花火',r:'はなび',e:'fireworks'},{w:'花束',r:'はなたば',e:'bouquet'}]},
+'草':{on:'ソウ',kun:'くさ',meaning:'grass, plant',words:[{w:'雑草',r:'ざっそう',e:'weeds'},{w:'草原',r:'そうげん',e:'grassland'},{w:'草食',r:'そうしょく',e:'herbivorous'}]},
+'木':{on:'モク・ボク',kun:'き・こ',meaning:'tree, wood',words:[{w:'木曜日',r:'もくようび',e:'Thursday'},{w:'木材',r:'もくざい',e:'lumber'},{w:'植木',r:'うえき',e:'garden plant'}]},
+'魚':{on:'ギョ',kun:'さかな・うお',meaning:'fish',words:[{w:'金魚',r:'きんぎょ',e:'goldfish'},{w:'魚介類',r:'ぎょかいるい',e:'seafood'},{w:'熱帯魚',r:'ねったいぎょ',e:'tropical fish'}]},
+'犬':{on:'ケン',kun:'いぬ',meaning:'dog',words:[{w:'愛犬',r:'あいけん',e:'beloved dog'},{w:'番犬',r:'ばんけん',e:'guard dog'},{w:'子犬',r:'こいぬ',e:'puppy'}]},
+'猫':{on:'ビョウ',kun:'ねこ',meaning:'cat',words:[{w:'野良猫',r:'のらねこ',e:'stray cat'},{w:'子猫',r:'こねこ',e:'kitten'},{w:'猫舌',r:'ねこじた',e:'sensitive to hot food'}]},
+'鳥':{on:'チョウ',kun:'とり',meaning:'bird',words:[{w:'小鳥',r:'ことり',e:'small bird'},{w:'渡り鳥',r:'わたりどり',e:'migratory bird'},{w:'鳥居',r:'とりい',e:'shrine gate'}]},
+'友':{on:'ユウ',kun:'とも',meaning:'friend',words:[{w:'友達',r:'ともだち',e:'friend'},{w:'友人',r:'ゆうじん',e:'friend (formal)'},{w:'親友',r:'しんゆう',e:'close friend'}]},
+'家':{on:'カ・ケ',kun:'いえ・や',meaning:'house, family',words:[{w:'家族',r:'かぞく',e:'family'},{w:'家庭',r:'かてい',e:'home/household'},{w:'作家',r:'さっか',e:'author'}]},
+'会':{on:'カイ・エ',kun:'あ-う',meaning:'meet, association',words:[{w:'会社',r:'かいしゃ',e:'company'},{w:'会議',r:'かいぎ',e:'meeting'},{w:'社会',r:'しゃかい',e:'society'}]},
+'社':{on:'シャ',kun:'やしろ',meaning:'company, shrine',words:[{w:'会社',r:'かいしゃ',e:'company'},{w:'社長',r:'しゃちょう',e:'president'},{w:'社会',r:'しゃかい',e:'society'}]},
+'仕':{on:'シ・ジ',kun:'つか-える',meaning:'serve, work',words:[{w:'仕事',r:'しごと',e:'work/job'},{w:'仕方',r:'しかた',e:'way of doing'},{w:'給仕',r:'きゅうじ',e:'waiter'}]},
+'事':{on:'ジ・ズ',kun:'こと',meaning:'thing, matter, event',words:[{w:'仕事',r:'しごと',e:'work'},{w:'大事',r:'だいじ',e:'important'},{w:'記事',r:'きじ',e:'article'}]},
+'思':{on:'シ',kun:'おも-う',meaning:'think',words:[{w:'思想',r:'しそう',e:'thought/ideology'},{w:'意思',r:'いし',e:'will/intention'},{w:'思い出',r:'おもいで',e:'memory'}]},
+'知':{on:'チ',kun:'し-る',meaning:'know',words:[{w:'知識',r:'ちしき',e:'knowledge'},{w:'知人',r:'ちじん',e:'acquaintance'},{w:'通知',r:'つうち',e:'notification'}]},
+'使':{on:'シ',kun:'つか-う',meaning:'use',words:[{w:'使用',r:'しよう',e:'use/usage'},{w:'大使',r:'たいし',e:'ambassador'},{w:'天使',r:'てんし',e:'angel'}]},
+'作':{on:'サク・サ',kun:'つく-る',meaning:'make, create',words:[{w:'作品',r:'さくひん',e:'work / piece'},{w:'作家',r:'さっか',e:'author'},{w:'操作',r:'そうさ',e:'operation/control'}]},
+'買':{on:'バイ',kun:'か-う',meaning:'buy',words:[{w:'売買',r:'ばいばい',e:'trade/dealing'},{w:'買い物',r:'かいもの',e:'shopping'}]},
+'売':{on:'バイ',kun:'う-る・う-れる',meaning:'sell',words:[{w:'販売',r:'はんばい',e:'sales'},{w:'売り場',r:'うりば',e:'sales floor'},{w:'売上',r:'うりあげ',e:'sales revenue'}]},
+'送':{on:'ソウ',kun:'おく-る',meaning:'send',words:[{w:'放送',r:'ほうそう',e:'broadcast'},{w:'送信',r:'そうしん',e:'transmission'},{w:'見送り',r:'みおくり',e:'seeing off'}]},
+'持':{on:'ジ',kun:'も-つ',meaning:'hold, have',words:[{w:'持参',r:'じさん',e:'bringing along'},{w:'気持ち',r:'きもち',e:'feeling'},{w:'所持',r:'しょじ',e:'possession'}]},
+'待':{on:'タイ',kun:'ま-つ',meaning:'wait',words:[{w:'期待',r:'きたい',e:'expectation'},{w:'招待',r:'しょうたい',e:'invitation'},{w:'待合室',r:'まちあいしつ',e:'waiting room'}]},
+'帰':{on:'キ',kun:'かえ-る・かえ-す',meaning:'return home',words:[{w:'帰国',r:'きこく',e:'returning home'},{w:'帰宅',r:'きたく',e:'returning home'},{w:'復帰',r:'ふっき',e:'comeback/return'}]},
+'起':{on:'キ',kun:'お-きる・お-こす',meaning:'wake up, rise',words:[{w:'起床',r:'きしょう',e:'getting up'},{w:'起動',r:'きどう',e:'startup'},{w:'早起き',r:'はやおき',e:'early rising'}]},
+'寝':{on:'シン',kun:'ね-る',meaning:'sleep',words:[{w:'就寝',r:'しゅうしん',e:'going to bed'},{w:'寝室',r:'しんしつ',e:'bedroom'},{w:'昼寝',r:'ひるね',e:'nap'}]},
+'着':{on:'チャク・ジャク',kun:'き-る・つ-く',meaning:'wear, arrive',words:[{w:'到着',r:'とうちゃく',e:'arrival'},{w:'着物',r:'きもの',e:'kimono'},{w:'上着',r:'うわぎ',e:'jacket'}]},
+'立':{on:'リツ・リュウ',kun:'た-つ・た-てる',meaning:'stand',words:[{w:'立場',r:'たちば',e:'standpoint'},{w:'独立',r:'どくりつ',e:'independence'},{w:'成立',r:'せいりつ',e:'establishment'}]},
+'座':{on:'ザ',kun:'すわ-る',meaning:'sit, seat',words:[{w:'座席',r:'ざせき',e:'seat'},{w:'星座',r:'せいざ',e:'constellation'},{w:'座布団',r:'ざぶとん',e:'floor cushion'}]},
+'走':{on:'ソウ',kun:'はし-る',meaning:'run',words:[{w:'競走',r:'きょうそう',e:'race'},{w:'走者',r:'そうしゃ',e:'runner'},{w:'暴走',r:'ぼうそう',e:'running wild'}]},
+'泳':{on:'エイ',kun:'およ-ぐ',meaning:'swim',words:[{w:'水泳',r:'すいえい',e:'swimming'},{w:'遠泳',r:'えんえい',e:'long-distance swimming'}]},
+'歌':{on:'カ',kun:'うた・うた-う',meaning:'song, sing',words:[{w:'歌手',r:'かしゅ',e:'singer'},{w:'国歌',r:'こっか',e:'national anthem'},{w:'歌詞',r:'かし',e:'lyrics'}]},
+'遊':{on:'ユウ・ユ',kun:'あそ-ぶ',meaning:'play, enjoy',words:[{w:'遊園地',r:'ゆうえんち',e:'amusement park'},{w:'遊び',r:'あそび',e:'play/fun'},{w:'遊泳',r:'ゆうえい',e:'swimming (formal)'}]},
+'働':{on:'ドウ',kun:'はたら-く',meaning:'work, labor',words:[{w:'労働',r:'ろうどう',e:'labor'},{w:'働き',r:'はたらき',e:'work/function'},{w:'共働き',r:'ともばたらき',e:'dual income'}]},
+'勉':{on:'ベン',kun:'',meaning:'study hard, diligence',words:[{w:'勉強',r:'べんきょう',e:'study'},{w:'勤勉',r:'きんべん',e:'diligence'}]},
+'強':{on:'キョウ・ゴウ',kun:'つよ-い・し-いる',meaning:'strong',words:[{w:'勉強',r:'べんきょう',e:'study'},{w:'強調',r:'きょうちょう',e:'emphasis'},{w:'最強',r:'さいきょう',e:'strongest'}]},
+'弱':{on:'ジャク',kun:'よわ-い',meaning:'weak',words:[{w:'弱点',r:'じゃくてん',e:'weak point'},{w:'虚弱',r:'きょじゃく',e:'frailty'},{w:'弱者',r:'じゃくしゃ',e:'the weak'}]},
+'明':{on:'メイ・ミョウ',kun:'あか-るい・あ-ける',meaning:'bright, clear',words:[{w:'明日',r:'あした/あす',e:'tomorrow'},{w:'説明',r:'せつめい',e:'explanation'},{w:'明確',r:'めいかく',e:'clear/definite'}]},
+'暗':{on:'アン',kun:'くら-い',meaning:'dark',words:[{w:'暗号',r:'あんごう',e:'code/cipher'},{w:'暗記',r:'あんき',e:'memorization'},{w:'暗闇',r:'くらやみ',e:'darkness'}]},
+'正':{on:'セイ・ショウ',kun:'ただ-しい・まさ',meaning:'correct, proper',words:[{w:'正直',r:'しょうじき',e:'honest'},{w:'正確',r:'せいかく',e:'accurate'},{w:'正月',r:'しょうがつ',e:'New Year'}]},
+'悪':{on:'アク・オ',kun:'わる-い',meaning:'bad, evil',words:[{w:'悪魔',r:'あくま',e:'devil/demon'},{w:'悪化',r:'あっか',e:'worsening'},{w:'悪口',r:'わるくち',e:'bad-mouthing'}]},
+'好':{on:'コウ',kun:'す-き・この-む',meaning:'like, fond of',words:[{w:'好き',r:'すき',e:'like/love'},{w:'好奇心',r:'こうきしん',e:'curiosity'},{w:'好評',r:'こうひょう',e:'favorable reception'}]},
+'嫌':{on:'ケン・ゲン',kun:'いや・きら-う',meaning:'dislike, hate',words:[{w:'嫌い',r:'きらい',e:'dislike'},{w:'嫌悪',r:'けんお',e:'disgust'},{w:'機嫌',r:'きげん',e:'mood/humor'}]},
+'楽':{on:'ガク・ラク',kun:'たの-しい',meaning:'fun, music, easy',words:[{w:'音楽',r:'おんがく',e:'music'},{w:'楽しい',r:'たのしい',e:'fun/enjoyable'},{w:'気楽',r:'きらく',e:'carefree'}]},
+'難':{on:'ナン',kun:'むずか-しい・かた-い',meaning:'difficult',words:[{w:'難しい',r:'むずかしい',e:'difficult'},{w:'困難',r:'こんなん',e:'hardship'},{w:'難民',r:'なんみん',e:'refugee'}]},
+'易':{on:'イ・エキ',kun:'やさ-しい',meaning:'easy, trade',words:[{w:'容易',r:'ようい',e:'easy'},{w:'貿易',r:'ぼうえき',e:'trade'},{w:'易しい',r:'やさしい',e:'easy'}]},
+'料':{on:'リョウ',kun:'',meaning:'fee, material',words:[{w:'料理',r:'りょうり',e:'cooking/cuisine'},{w:'材料',r:'ざいりょう',e:'ingredients'},{w:'料金',r:'りょうきん',e:'fee/charge'}]},
+'理':{on:'リ',kun:'',meaning:'reason, logic',words:[{w:'料理',r:'りょうり',e:'cooking'},{w:'理解',r:'りかい',e:'understanding'},{w:'心理',r:'しんり',e:'psychology'}]},
+'科':{on:'カ',kun:'',meaning:'department, subject',words:[{w:'科学',r:'かがく',e:'science'},{w:'外科',r:'げか',e:'surgery'},{w:'教科書',r:'きょうかしょ',e:'textbook'}]},
+'医':{on:'イ',kun:'',meaning:'medicine, doctor',words:[{w:'医者',r:'いしゃ',e:'doctor'},{w:'医学',r:'いがく',e:'medicine (field)'},{w:'歯医者',r:'はいしゃ',e:'dentist'}]},
+'病':{on:'ビョウ・ヘイ',kun:'や-む・やまい',meaning:'illness',words:[{w:'病院',r:'びょういん',e:'hospital'},{w:'病気',r:'びょうき',e:'illness'},{w:'看病',r:'かんびょう',e:'nursing (care)'}]},
+'薬':{on:'ヤク',kun:'くすり',meaning:'medicine, drug',words:[{w:'薬局',r:'やっきょく',e:'pharmacy'},{w:'薬品',r:'やくひん',e:'chemical/drug'},{w:'爆薬',r:'ばくやく',e:'explosive'}]},
+'血':{on:'ケツ',kun:'ち',meaning:'blood',words:[{w:'血液',r:'けつえき',e:'blood'},{w:'出血',r:'しゅっけつ',e:'bleeding'},{w:'血圧',r:'けつあつ',e:'blood pressure'}]},
+'夢':{on:'ム',kun:'ゆめ',meaning:'dream',words:[{w:'悪夢',r:'あくむ',e:'nightmare'},{w:'夢中',r:'むちゅう',e:'absorbed in'},{w:'夢想',r:'むそう',e:'daydream'}]},
+'愛':{on:'アイ',kun:'あい',meaning:'love',words:[{w:'愛情',r:'あいじょう',e:'affection'},{w:'恋愛',r:'れんあい',e:'romantic love'},{w:'愛犬',r:'あいけん',e:'beloved dog'}]},
+'命':{on:'メイ・ミョウ',kun:'いのち',meaning:'life, command',words:[{w:'命令',r:'めいれい',e:'order/command'},{w:'運命',r:'うんめい',e:'fate/destiny'},{w:'生命',r:'せいめい',e:'life'}]},
+'死':{on:'シ',kun:'し-ぬ',meaning:'die, death',words:[{w:'死亡',r:'しぼう',e:'death'},{w:'必死',r:'ひっし',e:'desperate'},{w:'死語',r:'しご',e:'dead language'}]},
+'戦':{on:'セン',kun:'たたか-う・いくさ',meaning:'war, battle',words:[{w:'戦争',r:'せんそう',e:'war'},{w:'挑戦',r:'ちょうせん',e:'challenge'},{w:'戦略',r:'せんりゃく',e:'strategy'}]},
+'勝':{on:'ショウ',kun:'か-つ',meaning:'win',words:[{w:'勝利',r:'しょうり',e:'victory'},{w:'優勝',r:'ゆうしょう',e:'championship win'},{w:'勝負',r:'しょうぶ',e:'match/contest'}]},
+'負':{on:'フ',kun:'ま-ける・おう',meaning:'lose, carry',words:[{w:'負け',r:'まけ',e:'loss/defeat'},{w:'勝負',r:'しょうぶ',e:'match'},{w:'負担',r:'ふたん',e:'burden'}]},
+'速':{on:'ソク',kun:'はや-い・はや-める',meaning:'fast, speed',words:[{w:'速度',r:'そくど',e:'speed'},{w:'高速',r:'こうそく',e:'high speed'},{w:'急速',r:'きゅうそく',e:'rapid'}]},
+'遅':{on:'チ',kun:'おそ-い・おく-れる',meaning:'slow, late',words:[{w:'遅刻',r:'ちこく',e:'being late'},{w:'遅延',r:'ちえん',e:'delay'},{w:'遅い',r:'おそい',e:'slow/late'}]},
+'近':{on:'キン',kun:'ちか-い',meaning:'near, close',words:[{w:'近所',r:'きんじょ',e:'neighborhood'},{w:'最近',r:'さいきん',e:'recently'},{w:'付近',r:'ふきん',e:'vicinity'}]},
+'遠':{on:'エン・オン',kun:'とお-い',meaning:'far, distant',words:[{w:'遠足',r:'えんそく',e:'excursion'},{w:'永遠',r:'えいえん',e:'eternity'},{w:'遠慮',r:'えんりょ',e:'restraint/hesitation'}]},
+'重':{on:'ジュウ・チョウ',kun:'おも-い・かさ-ねる',meaning:'heavy, important',words:[{w:'重要',r:'じゅうよう',e:'important'},{w:'体重',r:'たいじゅう',e:'body weight'},{w:'重力',r:'じゅうりょく',e:'gravity'}]},
+'軽':{on:'ケイ',kun:'かる-い',meaning:'light (weight)',words:[{w:'軽快',r:'けいかい',e:'nimble/light'},{w:'軽減',r:'けいげん',e:'reduction'},{w:'気軽',r:'きがる',e:'casual/easygoing'}]},
+'太':{on:'タ・タイ',kun:'ふと-い',meaning:'fat, thick',words:[{w:'太陽',r:'たいよう',e:'sun'},{w:'太鼓',r:'たいこ',e:'drum'},{w:'丸太',r:'まるた',e:'log'}]},
+'細':{on:'サイ',kun:'ほそ-い・こま-かい',meaning:'thin, fine, detailed',words:[{w:'細かい',r:'こまかい',e:'detailed/fine'},{w:'細胞',r:'さいぼう',e:'cell (biology)'},{w:'詳細',r:'しょうさい',e:'details'}]},
+'多':{on:'タ',kun:'おお-い',meaning:'many, much',words:[{w:'多数',r:'たすう',e:'many/majority'},{w:'多様',r:'たよう',e:'diverse'},{w:'多分',r:'たぶん',e:'probably'}]},
+'少':{on:'ショウ',kun:'すく-ない・すこ-し',meaning:'few, little',words:[{w:'少数',r:'しょうすう',e:'minority/few'},{w:'少々',r:'しょうしょう',e:'a little'},{w:'減少',r:'げんしょう',e:'decrease'}]},
+};
+
+// ══════════════════════════════════════════
+//  FULL JOYO LIST (2136)
+// ══════════════════════════════════════════
+const JOYO='亜哀挨愛曖悪握圧扱宛嵐安案暗以衣位囲医依委威為畏胃尉異移萎偉椅彙意違維慰遺緯域育一壱逸茨芋引印因咽姻員院淫陰飲隠韻右宇羽雨唄鬱畝浦運雲永泳栄営詠影映曳英衛詠鋭液疫益駅悦謁越閲宴援炎煙猿縁艶鉛汚凹押旺欧殴王翁沖憶乙卸恩温穏下化火仮何花佳加可夏嫁家寡科暇架歌貨迦蚊俄峨芽鹿雅餓介快怪悔懐戒拐皆劾街外核郭格殻獲確革学岳楽額顎掛潟括轄且株鎌刈乾冠勧寛堪貫換敢陥感慣漢艦還鑑丸含岸眼願機器喜基奇嬉寄岐希幾忌揮机旗既期棋棄気汽祈季規記貴起軌輝飢騎鬼亀偽儀宜戯技擬欺犠疑義議菊吉喫詰却脚虐丘及救急泣宮弓急朽求球究窮笑級給旧牛去拒距挙虚許漁魚享競共凶協匡叫境橋況狂狭矯胸脅恐恭興鏡響驚仰凝暁業極禁僅筋緊錦謹近金吟銀九句区苦駆串駒具遇愚空偶屈掘窟熊繰桑勲薫訓軍郡群鶏傾刑兄啓圭型契形径恵慶掲携渓継茎蛍計詣警軽鶏芸迎鯨劇撃激傑欠決潔穴結血月件倹健兼券剣喧圏堅嫌懸検権犬献研絹険顕験厳弦源現減言限古呼固孤弧枯湖虎誇跨雇鼓顧五互午呉後娯悟語誤護口工公功効厚向幸坑好孔巧控攻更校梗構江洪浩港皇硬稿綱耕肯航荒行衡講高鋼克告国黒穀酷獄骨混紺魂困婚恨懇昆根梱再在材剤罪財冴坂阪崎策錯桜冊刷察撮擦暫産散参惨算酸賛残師嗣施旨祉私脂至視詞誌詩試諮資賜雌飼歯事似侍児字慈滋治耳磁示捨射斜煮謝邪蛇者借勺尺爵酌釈寂朱殊狩珠趣儒寿受授樹需囚収周宗就州拾秋臭修習終袖銃獣縦叔塾宿粛縮述術俊春瞬准循殉淳潤盾純遵順処初所書庶暑渚湧諸女序徐除傷匠奨将床昇晶松沼照詔障丈乗冗剰城浄畳縄壌嬢情条杖状飾植殖食触伸申真寝審慎振新森浸深矧紳臣進針信薪仁刃尋甚腎陣図炊帥粋酔遂随髄崇枢砂挫債催再最妻宰彩栽歳斎細菜裁材罪司史嗣四士始姉姿子市師思指支施旨枝止氏祉私糸紫肢脂至視詞誌諮資賜雌飼歯次示字耳慈滋治爾磁似侍児時識軸七叱失室嫉湿漆疾執筆芝謝斜煮邪蛇借尺爵酌釈寂朱殊狩珠趣儒寿受授樹需囚収周宗就州拾秋臭修習終袖銃獣縦叔塾宿粛縮述術俊春瞬准循殉淳盾純遵順処初所書庶暑渚湧諸女序徐除傷匠奨将床昇晶松沼照詔障丈乗冗剰城浄畳縄壌嬢情条杖状飾植殖食触伸申真寝審慎振新森浸深矧紳臣進針信薪仁刃尋甚腎陣図炊帥粋酔遂随髄崇枢須図是姓征性成整星清澄盛精製誠請勢静隻惜籍跡析拙接摂折設雪窃節絶専占扇旋染洗繊船薦詮遷銭銑善然禅臓贈双壮奏爽宋層操燥巣騒藻仙宣専川占浅潜先千舌説折設雪切接摂折節絶掃争相窓創壮装双早走奏相総綜草荘送葬蔵臓贈尊丹単嘆担淡端炭探誕鍛団弾地恥値置遅築畜竹茶着仲虫沖柱注駐著貯徴懲肉丑内弐妊任認濡猫年念燃悩納脳波派婆廃排敗杯背肺俳輩倍賠薄漠縛罰抜髪伐閥繁盤晩蛮卑妃彼悲扉批披碑被秘避非飛尾鼻疲微膝匹筆百缶弼姫頻敏浜賓貧瓶普賦附腐敷浮府扶撫武符封伏幅覆払噴墳焚丙並塀閉癖碧壁偏変片辺返遍弁穂保補倣俸包崩抱泡砲縫肪胞芳邦膨蜂傍鉾撲僕墨朴没翻凡盆摩磨魔枚埋妹膜幕又抹末繭慢漫蜜妙矛霧夢銘滅猛盲耗木紋問冶夜野厄役約訳躍愉諭癒唯勇幽悠憂融裕雄誘傭溶熔窯用羊養揺謡踊抑欲翼羅裸頼雷洛落欄濫吏利履痢離立率隆竜虜慮略柳両凌猟療糧倫臨輪隣塁涙励鈴零隷霊齢麗烈恋廉練錬露老労朗楼篭録湾腕';
+const JLPT_N5='日一国会人年大十二本中長出三時行社見月分後前生五間上東四今新金九入立手学高円子目外言八六下来気小七山話多安女北午百書先名川千道水半男西電口少校語空土木聞食車何南足万店毎白古天買週母火花右読友左休父駅雨飲魚耳';
+const JLPT_N4='同事自民発者地合市業方回場員開力問代明動京通理体田主題首意不作用度強持野都以思家世区県進正院心界産教文元重近考画海売知集別物引使所品計死特私始朝村運終台広住真有町料工建急止送切説転研究楽起着乗病声質待試族銀早映親験働好英頭低医仕去味門写字答夜音注帰歌光悪図室太歩風紙黒春赤青森館屋色走秋林夏顔短薬習便洋旅軽池服遠夕借曜弱肉貸堂暗鳥飯勉冬昼茶弟洗牛兄犬菜暑妹寒姉漢';
+const JLPT_N3='政議連対部党内相定選米実関決全表戦経最現調化当約法性的要制治務成期公協取和機平総加受領続設保改数記初指権支第結点報済府活原共得解交資予向際査勝面委告軍反判認参利組案信在件団側任求次昨論官増係感情投示変打基各島直両革価式確果勢減容必応演歳争談能無再位置流格疑過局放税検常状球営職与供可役構割身費付由比難防補優夫収断石違消境神番規術展導備宅害配副算条独警育席輸訪述残想線率農州武念象域助労例然張限額環追商';
+const JLPT_N2='葉伝形景落欧担退準賞辺造被技復負渡失移差個評課末守若脳極種美命含福蔵量望非観察整段横型深製況申様財港識呼達良針専谷候史階程満敗管値突兵接器路科授細効積丸他湾録処省旧橋岸客否周師材登批易健戸速存飛殺央券号単座破編捜竹除完降超責並療修捕危採競拡故給介根苦迎販園具異歴辞将因馬愛幅富彼般未貿講舞装諸亡劇河航冷適婦鉄寄込類児余禁印逆王返標換久油妻暴輪占背植熱宿清険頼覚船倍均億途圧芸許署抜伸留罪停爆陸玉波帯延羽努固精則乱普散司康測豊静善婚厚喜齢囲卒略承浮順絶級幸岩練押倒了庁城等救層版老令角絡損募曲裏払庭徒仏績築貨志混昇勤血遅居温雑招季困星永著誌庫刊像香欠更坂刻底賛抱犯布恐寺息宇戻巨震願絵希越欲痛触依汚枚笑互複郵束仲栄札似恵板列探逃節骨傾届遊迷夢巻君燃閉緒包駐賃折紹草雇暮替預焼簡章臓律贈照宙酒薄群悲秒操奥詰晴双刺到寝壁仮純盗吸看翌陽快片敬悩泉御皮漁荒貯硬歯埋柱祭袋忘雪筆吹訓浴童宝封胸娘砂塩誤賢腕較兆床畑慣毛緑尊祝礼窓柔昔殿濃液貧衣肩零怒泳祖幼荷泊杯黄甘臣浅掃雲掘疲捨皆軟沈鳴凍腹乳煙恋紅郊腰炭踊冊眠勇械怖珍卵湖狭喫干頂虫刷湯箱溶暖鉱泣涙匹孫鋭枝塗軒毒晩叫拝氷乾棒祈髪忙拾粉糸綿才汗銅湿咲召脂蒸肌靴耕鈍恥泥隅偶灯辛磨麦姓筒鼻粒詞偉胃畳机膚濯猫塔沸灰菓帽枯涼舟貝符憎皿肯燥畜坊挟曇滴伺';
+const JLPT_N1='亥胤叡謁箇茄且侃莞伎誼鞠斤衿玖虞袈絃梧瑚倖昂墾瑳裟哉采燦爾璽紗勺爵竣遵醇恕捷梢菖丞錘嵩碩銑塑汰旦脹朕紬汀痘凪捺弐柊賦楓蕗丙柾亦麿椋耗匁冶耶宥蓉濫吏璃瞭諒琳麟伶侑勁奎崚昴晏晨晟栞椰洵滉澪燎燿瑶眸笙綸茉莉菫詢諄迪頌颯凜熙氏統派策提挙企藤沢裁証援施井護態鮮視幹宮衛監審義訴株姿閣衆影松撃佐核融票渉響推請士討攻崎督催及憲離激摘系郎盟従隊織振弁就献厳維浜遺塁邦素遣抗模雄益緊宣昭廃伊江僚吉盛皇臨踏壊債興源儀創障継筋闘葬避逮迫惑崩紀聴脱博患締執房撤削密措載陣我為抑幕染奈傷択秀徴弾償功拠秘拒刑塚致繰尾描鈴盤項喪伴養懸街契掲躍棄邸籍縮還属慮枠露沖緩需射購揮充跡貢鹿却端獲郡併徹貴衝焦奪災浦析譲称納樹挑誘紛至宗促慎控智握俊銭渋銃携診託撮誕侵括掛謝孝駆透津稲裂敏是排裕堅訳芝綱典賀扱顧弘訟戒祉誉歓奏勧騒閥甲縄郷揺免既薦隣華範隠徳哲杉里釈己妥威豪熊滞微隆症暫忠倉彦肝喚沿妙唱阿索誠襲懇俳柄驚麻李浩剤瀬趣陥斎貫仙慰序旬兼聖旨即柳舎偽覇詳抵脅茂犠旗距雅飾網竜詩繁翼潟敵魅嫌斉敷擁圏酸罰滅礎腐脚潮梅尽僕桜滑孤炎賠句寿鋼頑鎖彩摩励縦輝蓄軸巡稼瞬砲噴誇祥牲秩帝宏唆阻泰賄撲堀菊絞縁唯膨矢耐塾漏慶猛芳懲剣彰棋丁恒揚冒之倫陳憶潜梨仁克岳概拘墓黙須偏雰遇諮卓亀糧簿炉牧殊殖艦輩穴奇慢鶴謀昌拍朗丈寛覆胞隔浄没暇肺貞靖鑑飼陰銘随烈尋稿丹啓也丘棟壌漫玄粘悟舗妊熟旭恩騰往豆遂狂岐陛緯培衰艇屈径淡抽披廷錦准磯奨浸剰胆繊駒虚霊帳悔諭惨虐翻墜沼据肥徐糖搭盾脈滝軌俵妨擦鯨荘諾雷漂懐勘栽拐駄添冠斜鏡聡浪亜覧詐壇勲魔酬紫曙紋卸奮欄逸涯拓眼瓶獄尚彫穏顕巧矛垣欺釣缶萩粧隻粛栗愚嘉遭架鬼庶稚滋幻煮姫誓把践呈疎仰剛疾征砕謡嫁謙后嘆菌鎌巣頻琴班棚潔酷宰廊寂辰霞伏碁俗漠邪晶墨鎮洞履劣那殴娠奉憂朴亭淳怪鳩酔惜穫佳潤悼乏該赴桑桂髄虎盆晋穂壮堤飢傍疫累痴搬晃癒桐寸郭尿凶吐宴鷹賓虜陶鐘憾猪紘磁弥昆粗訂芽庄傘敦騎寧循忍怠如寮祐鵬鉛珠凝苗獣哀跳匠垂蛇澄縫僧幾眺唐亘呉凡憩媛溝恭刈睡錯伯笹穀陵霧魂弊妃舶餓窮掌麗綾臭悦刃縛暦宜盲粋辱毅轄猿弦稔窒炊洪摂飽冗桃狩朱渦紳枢碑鍛刀鼓裸猶塊旋弓幣膜扇腸槽慈楊伐駿漬糾亮墳坪紺慌娯吾椿舌羅峡俸厘峰圭醸蓮弔乙汁尼遍衡薫猟羊款閲偵喝敢胎酵憤豚遮扉硫赦窃泡瑞又慨紡恨肪扶戯伍忌濁奔斗蘭迅肖鉢朽殻享秦茅藩沙輔媒鶏禅嘱胴迭挿嵐椎絹陪剖譜郁悠淑帆暁傑楠笛玲奴錠拳翔遷拙侍尺峠篤肇渇叔雌亨堪叙酢吟逓嶺甚喬崇漆岬癖愉寅礁乃洲屯樺槙姻巌擬塀唇睦閑胡幽峻曹詠卑侮鋳抹尉槻隷禍蝶酪茎帥逝汽琢匿襟蛍蕉寡琉痢庸朋坑藍賊搾畔遼唄孔橘漱呂拷嬢苑巽杜渓翁廉謹瞳湧欣窯褒醜升殉煩巴禎劾堕租稜桟倭婿慕斐罷矯某囚魁虹鴻泌於赳漸蚊葵厄藻禄孟嫡尭嚇巳凸暢韻霜硝勅芹杏棺儒鳳馨慧愁楼彬匡眉欽薪褐賜嵯綜繕栓翠鮎榛凹艶惣蔦錬隼渚衷逐斥稀芙詔皐雛惟佑耀黛渥憧宵妄惇脩甫酌蚕嬉蒼暉頒只肢檀凱彗謄梓丑嗣叶汐絢朔伽畝抄爽黎惰蛮冴旺萌偲壱瑠允侯蒔鯉弧遥矩舜瑛附彪卯但綺芋茜凌皓洸毬婆緋鯛怜邑倣碧啄穣酉悌倹柚繭';
+
+const JOYO_LIST=[...new Set(JOYO.split('').filter(c=>/[\u4e00-\u9fff]/.test(c)))];
+const JLPT_LISTS={joyo:JOYO_LIST,n5:[...new Set(JLPT_N5.split(''))],n4:[...new Set(JLPT_N4.split(''))],n3:[...new Set(JLPT_N3.split(''))],n2:[...new Set(JLPT_N2.split(''))],n1:[...new Set(JLPT_N1.split(''))]};
+const JLPT_TOTALS={n5:103,n4:181,n3:200,n2:539,n1:1207};
+
+// ══════════════════════════════════════════
+//  DAILY FACTS
+// ══════════════════════════════════════════
+const FACTS=[
+  {jp:'〜にもかかわらず',read:'〜にもかかわらず',meaning:'Despite / in spite of — formal written register',ex:'反対にもかかわらず、計画は進んだ。\nDespite opposition, the plan proceeded.'},
+  {jp:'〜わけではない',read:'〜わけではない',meaning:'It\'s not that ~ / doesn\'t necessarily mean ~',ex:'嫌いなわけではないが、苦手だ。\nIt\'s not that I hate it; I just struggle with it.'},
+  {jp:'〜に違いない',read:'〜にちがいない',meaning:'Must be / There\'s no doubt that ~',ex:'彼は知っているに違いない。\nHe must know.'},
+  {jp:'〜ものの',read:'〜ものの',meaning:'Although / even though — concessive, formal',ex:'合格したものの、喜べない。\nAlthough I passed, I can\'t be happy.'},
+  {jp:'〜ばかりか',read:'〜ばかりか',meaning:'Not only ~ but also / on top of that',ex:'英語ばかりか、中国語も話せる。\nNot only English, but Chinese too.'},
+  {jp:'〜とはいえ',read:'〜とはいえ',meaning:'That said / even so — concedes then counters',ex:'便利とはいえ、使い過ぎは禁物だ。\nThat said, overuse should be avoided.'},
+  {jp:'〜ずにはいられない',read:'〜ずにはいられない',meaning:'Can\'t help but ~ / unable to stop oneself',ex:'笑わずにはいられなかった。\nI couldn\'t help but laugh.'},
+  {jp:'〜かねない',read:'〜かねない',meaning:'Might / could possibly (risk of negative outcome)',ex:'このままでは失敗しかねない。\nAt this rate, failure is possible.'},
+  {jp:'〜に際して',read:'〜にさいして',meaning:'At the time of / on the occasion of — formal',ex:'出発に際して、一言挨拶します。\nOn the occasion of departure, I\'ll say a word.'},
+  {jp:'〜てしまう',read:'〜てしまう',meaning:'To end up doing / completion with regret or finality',ex:'財布を忘れてしまった。\nI went and forgot my wallet.'},
+];
+
+// ══════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════
+let wkKey='',ankiUrl='http://localhost:8765';
+let logs=[],manualKanji={},wkKanjiData={},gsmData=[];
+let curKF='joyo';
+let kSearchQuery='';
+let ankiDecks=[],curDeckIdx=0;
+let curWeekTab=0;
+let weekAnkiData=null;
+const WEEK_TABS=[
+  {key:'minutes', label:'Session minutes', sub:'manual log entries', color:'var(--accent3)'},
+  {key:'anki',    label:'Anki reviews',    sub:'cards reviewed per day', color:'var(--accent2)'},
+];
+const BP_JLPT_TOTALS={N5:80,N4:170,N3:370,N2:415,N1:1232};
+
+// ══════════════════════════════════════════
+//  THEME
+// ══════════════════════════════════════════
+function setTheme(t, btn){
+  document.documentElement.setAttribute('data-theme', t);
+  document.querySelectorAll('.theme-opt').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  else {
+    const target = document.querySelector(`.theme-opt[data-theme-val="${t}"]`);
+    if (target) target.classList.add('active');
+  }
+  localStorage.setItem('jp_theme', t);
+}
+
+// ══════════════════════════════════════════
+//  NAV
+// ══════════════════════════════════════════
+const NAVMAP={today:0,weekly:1,kanji:2,grammar:3,anki:4,gsm:5,log:6};
+function go(name){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  if(NAVMAP[name]!==undefined) document.querySelectorAll('.nav-item')[NAVMAP[name]].classList.add('active');
+  if(name==='kanji') renderKanjiGrid();
+  if(name==='weekly') renderWeekly();
+  if(name==='grammar') renderGrammar();
+  if(name==='anki') fetchAnki();
+  if(name==='gsm') renderGSM();
+}
+
+// ══════════════════════════════════════════
+//  MODAL
+// ══════════════════════════════════════════
+function openM(id){document.getElementById(id).classList.add('open');}
+function closeM(id){document.getElementById(id).classList.remove('open');}
+document.addEventListener('click',e=>{if(e.target.classList.contains('mo'))e.target.classList.remove('open');});
+
+// ══════════════════════════════════════════
+//  KEYS
+// ══════════════════════════════════════════
+function saveKeys(){
+  wkKey=document.getElementById('wk-key').value.trim();
+  ankiUrl=document.getElementById('anki-url').value.trim()||'http://localhost:8765';
+  localStorage.setItem('wk_key',wkKey);
+  localStorage.setItem('anki_url',ankiUrl);
+  closeM('m-setup');
+  updateBanner();
+  if(wkKey){fetchWK();syncWKKanji();}
+}
+function updateBanner(){
+  // Setup banner is hidden — settings live in the gear icon modal now.
+  // Function kept as no-op so existing callers don't error.
+  const b = document.getElementById('setup-banner');
+  if (b) b.style.display = 'none';
+}
+
+// ══════════════════════════════════════════
+//  DATE
+// ══════════════════════════════════════════
+function todayStr(){return new Date().toISOString().slice(0,10);}
+function updateDate(){
+  const now=new Date();
+  set('date-stamp',now.toLocaleDateString('ja-JP',{year:'numeric',month:'long',day:'numeric',weekday:'short'})+' · '+now.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}));
+}
+
+// ══════════════════════════════════════════
+//  WANIKANI
+// ══════════════════════════════════════════
+async function fetchWK(){
+  if(!wkKey) return;
+  try{
+    const [sumR,userR]=await Promise.all([
+      fetch('https://api.wanikani.com/v2/summary',{headers:{Authorization:`Bearer ${wkKey}`}}),
+      fetch('https://api.wanikani.com/v2/user',{headers:{Authorization:`Bearer ${wkKey}`}}),
+    ]);
+    if(!sumR.ok) throw new Error('auth');
+    const sum=await sumR.json(),user=await userR.json();
+    set('wk-reviews',sum.data.reviews.reduce((a,b)=>a+b.subject_ids.length,0));
+    set('wk-lessons',sum.data.lessons.reduce((a,b)=>a+b.subject_ids.length,0));
+    document.getElementById('wk-lv-badge').innerHTML=`<span style="font-family:'DM Mono',monospace;font-size:.71rem;color:var(--accent);">⛩ Level ${user.data.level}</span>`;
+    renderUpcoming(sum.data.reviews);
+    try{const bR=await fetch('https://api.wanikani.com/v2/assignments?burned=true',{headers:{Authorization:`Bearer ${wkKey}`}});if(bR.ok){const bd=await bR.json();set('wk-burned',(bd.total_count??'—').toLocaleString?.()||bd.total_count);}}catch{}
+    // Fetch cumulative stats from review_statistics endpoint (still works, unlike /reviews)
+    fetchWKCumulativeStats();
+  }catch{['wk-reviews','wk-lessons','wk-burned'].forEach(id=>set(id,'Err'));document.getElementById('wk-upcoming').innerHTML='<div class="err-note">WaniKani error — check your API key.</div>';}
+}
+
+async function fetchWKCumulativeStats(){
+  // /v2/review_statistics gives per-subject totals; we aggregate.
+  // Reviews endpoint returns empty (WK disabled it in 2023), so this is the only source.
+  if(!wkKey) return;
+  try{
+    let url = 'https://api.wanikani.com/v2/review_statistics';
+    let totalCorrectMeaning = 0, totalIncorrectMeaning = 0;
+    let totalCorrectReading = 0, totalIncorrectReading = 0;
+    let bestStreak = 0;
+
+    while(url){
+      const r = await fetch(url, {headers:{Authorization:`Bearer ${wkKey}`}});
+      if(!r.ok){ console.error('[WK] review_statistics failed:', r.status); break; }
+      const data = await r.json();
+      (data.data||[]).forEach(s => {
+        const a = s.data;
+        totalCorrectMeaning   += a.meaning_correct   || 0;
+        totalIncorrectMeaning += a.meaning_incorrect || 0;
+        totalCorrectReading   += a.reading_correct   || 0;
+        totalIncorrectReading += a.reading_incorrect || 0;
+        const m = Math.max(a.meaning_max_streak||0, a.reading_max_streak||0);
+        if(m > bestStreak) bestStreak = m;
+      });
+      url = data.pages?.next_url || null;
+    }
+
+    const totalCorrect = totalCorrectMeaning + totalCorrectReading;
+    const totalAnswers = totalCorrect + totalIncorrectMeaning + totalIncorrectReading;
+    // Reviews ≈ pairs (each review = meaning + reading for kanji/vocab), so divide by 2 for an approx review count
+    const totalReviews = Math.round(totalAnswers / 2);
+    const accuracy = totalAnswers > 0 ? Math.round((totalCorrect / totalAnswers) * 100) : 0;
+
+    set('wk-total-reviews', totalReviews.toLocaleString());
+    set('wk-accuracy', accuracy + '%');
+    set('wk-streak', bestStreak.toLocaleString());
+  }catch(e){
+    console.error('[WK] cumulative stats error:', e);
+    ['wk-total-reviews','wk-accuracy','wk-streak'].forEach(id => set(id,'Err'));
+  }
+}
+function renderUpcoming(reviews){
+  const el=document.getElementById('wk-upcoming');
+  const upc=reviews.slice(0,5);
+  if(!upc.length){el.innerHTML='<p style="font-size:.8rem;color:var(--ink3)">No upcoming reviews.</p>';return;}
+  el.innerHTML=upc.map(r=>{
+    const t=new Date(r.available_at);
+    const lbl=t.toDateString()===new Date().toDateString()?`Today · ${t.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})}`:t.toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+    return `<div class="rr"><span class="rr-l">${lbl}</span><span class="rr-r">${r.subject_ids.length}</span></div>`;
+  }).join('');
+}
+async function syncWKKanji(){
+  if(!wkKey){alert('Add your WaniKani API key first.');openM('m-setup');return;}
+  const btn=document.getElementById('wk-sync-btn');btn.textContent='⟳ Syncing…';btn.disabled=true;
+  try{
+    let url='https://api.wanikani.com/v2/assignments?subject_types=kanji',all=[];
+    while(url){const r=await fetch(url,{headers:{Authorization:`Bearer ${wkKey}`}});const d=await r.json();all=all.concat(d.data);url=d.pages?.next_url||null;}
+    const ids=all.map(a=>a.data.subject_id);wkKanjiData={};
+    for(let i=0;i<ids.length;i+=500){
+      const chunk=ids.slice(i,i+500);
+      const sr=await fetch(`https://api.wanikani.com/v2/subjects?ids=${chunk.join(',')}&types=kanji`,{headers:{Authorization:`Bearer ${wkKey}`}});
+      const sd=await sr.json();
+      sd.data.forEach(s=>{const c=s.data.characters,a=all.find(x=>x.data.subject_id===s.id);if(c&&a){const srs=a.data.srs_stage;wkKanjiData[c]=srs>=9?'burned':srs>=5?'passed':srs>=1?'learning':'locked';}});
+    }
+    localStorage.setItem('wk_kanji',JSON.stringify(wkKanjiData));renderKanjiGrid();
+  }catch(e){console.error(e);}
+  btn.textContent='⟳ Sync WK';btn.disabled=false;
+}
+
+// ══════════════════════════════════════════
+//  BUNPRO MANUAL
+// ══════════════════════════════════════════
+function buildBPJLPTInputs(){
+  const el=document.getElementById('bp-jlpt-inputs');
+  const levels=['N5','N4','N3','N2','N1'];
+  const colors=['var(--accent3)','var(--accent2)','var(--accent)','var(--accent2)','var(--accent)'];
+  const saved=JSON.parse(localStorage.getItem('bp_jlpt')||'{}');
+  el.innerHTML=`<div style="font-size:.82rem;color:var(--ink2);margin-bottom:.6rem;">JLPT progress (grammar points known)</div>`+
+  levels.map((l,i)=>{
+    const val=saved[l]||0;const total=BP_JLPT_TOTALS[l];
+    const pct=Math.min(Math.round((val/total)*100),100);
+    return `<div class="bp-jlpt-row">
+      <span class="bp-jlpt-tag">${l}</span>
+      <input class="bp-jlpt-input" id="bp-jlpt-${l}" type="number" min="0" max="${total}" value="${val}" oninput="saveBP()">
+      <div class="bp-jlpt-bw"><div class="bp-jlpt-bf" id="bp-jlpt-bar-${l}" style="width:${pct}%;background:${colors[i]};"></div></div>
+      <span class="bp-jlpt-total">/ ${total}</span>
+    </div>`;
+  }).join('');
+}
+
+function saveBP(){
+  const data={
+    reviews: parseInt(document.getElementById('bp-in-reviews')?.value)||0,
+    studied: parseInt(document.getElementById('bp-in-studied')?.value)||0,
+    ghost:   parseInt(document.getElementById('bp-in-ghost')?.value)||0,
+    streak:  parseInt(document.getElementById('bp-in-streak')?.value)||0,
+  };
+  localStorage.setItem('bp_manual',JSON.stringify(data));
+  const levels=['N5','N4','N3','N2','N1'];
+  const jlpt={};
+  levels.forEach(l=>{
+    const el=document.getElementById(`bp-jlpt-${l}`);
+    if(el) jlpt[l]=parseInt(el.value)||0;
+  });
+  localStorage.setItem('bp_jlpt',JSON.stringify(jlpt));
+  syncBPToCards();
+  renderJLPTBars();
+}
+
+function syncBPToCards(){
+  const data=JSON.parse(localStorage.getItem('bp_manual')||'{}');
+  set('bp-card-reviews', data.reviews??'—');
+  set('bp-card-studied', data.studied??'—');
+  set('bp-card-ghost',   data.ghost??'—');
+}
+
+function loadBPInputs(){
+  const data=JSON.parse(localStorage.getItem('bp_manual')||'{}');
+  const set2=(id,v)=>{const el=document.getElementById(id);if(el&&v!==undefined)el.value=v;};
+  set2('bp-in-reviews',data.reviews||'');
+  set2('bp-in-studied',data.studied||'');
+  set2('bp-in-ghost',  data.ghost||'');
+  set2('bp-in-streak', data.streak||'');
+}
+
+function renderJLPTBars(){
+  const levels=['N5','N4','N3','N2','N1'];
+  const colors=['var(--accent3)','var(--accent2)','var(--accent)','var(--accent2)','var(--accent)'];
+  const saved=JSON.parse(localStorage.getItem('bp_jlpt')||'{}');
+  const el=document.getElementById('jlpt-bars');
+  if(!el) return;
+  el.innerHTML=levels.map((l,i)=>{
+    const k=saved[l]||0,t=BP_JLPT_TOTALS[l],pct=Math.min(Math.round((k/t)*100),100);
+    // also update input bars if visible
+    const bf=document.getElementById(`bp-jlpt-bar-${l}`);
+    if(bf) bf.style.width=pct+'%';
+    return `<div class="jlpt-row"><span class="jlpt-tag">${l}</span><div class="jlpt-bw"><div class="jlpt-bf" style="width:${pct}%;background:${colors[i]};"></div></div><span class="jlpt-n">${k} / ${t}</span></div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════
+//  GRAMMAR
+// ══════════════════════════════════════════
+function renderGrammar(){
+  renderJLPTBars();
+  syncBPToCards();
+  const points=[
+    {pat:'〜てしまう',mean:'to end up doing; regret or finality',lv:'N4',srs:7},
+    {pat:'〜ようになる',mean:'to come to / reach the point where',lv:'N3',srs:6},
+    {pat:'〜に関して',mean:'regarding / concerning (formal)',lv:'N2',srs:5},
+    {pat:'〜ものだ',mean:'that\'s the way things are; custom',lv:'N3',srs:4},
+    {pat:'〜かねる',mean:'cannot bring oneself to do',lv:'N2',srs:3},
+    {pat:'〜ずに',mean:'without doing ~',lv:'N4',srs:8},
+    {pat:'〜によって',mean:'depending on / due to / by means of',lv:'N3',srs:6},
+    {pat:'〜に際し',mean:'at the time of (very formal)',lv:'N1',srs:2},
+    {pat:'〜とはいえ',mean:'that said / even so',lv:'N2',srs:5},
+    {pat:'〜にもかかわらず',mean:'despite / in spite of',lv:'N2',srs:4},
+  ];
+  const el=document.getElementById('grammar-list');
+  if(el) el.innerHTML=points.map(p=>{
+    const dots=Array.from({length:9},(_,i)=>`<div class="srs-dot${i<p.srs?' f':''}"></div>`).join('');
+    return `<div class="gi"><div class="gi-l"><div class="gi-pat">${linkifyKanji(p.pat)}</div><div class="gi-mean">${linkifyKanji(p.mean)}</div></div><div class="gi-r"><span class="gi-lv">${p.lv}</span><div class="srs-dots">${dots}</div></div></div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════
+//  ANKI (per-deck with arrows)
+// ══════════════════════════════════════════
+async function ankiReq(action,params={}){
+  const res=await fetch(ankiUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,version:6,params})});
+  const data=await res.json();
+  if(data.error) throw new Error(data.error);
+  return data.result;
+}
+
+async function fetchAnki(){
+  const errEl=document.getElementById('anki-error');
+  errEl.style.display='none';
+  set('deck-title','Loading…');
+
+  try{
+    const deckNames=await ankiReq('deckNames');
+    // Filter out sub-decks duplicates and get top-level or all decks
+    const deckStats=await ankiReq('getDeckStats',{decks:deckNames});
+
+    // For each deck, get today's reviewed cards using rated:1
+    const deckList=Object.values(deckStats)
+      .filter(d=>d.deck_id>0&&d.name!=='Default')
+      .sort((a,b)=>a.name.localeCompare(b.name));
+
+    // Batch: get reviewed today per deck
+    const reviewedToday=await Promise.all(deckList.map(async d=>{
+      try{
+        const cards=await ankiReq('findCards',{query:`deck:"${d.name}" rated:1`});
+        return cards.length;
+      }catch{return 0;}
+    }));
+
+    ankiDecks=deckList.map((d,i)=>({
+      name: d.name,
+      new: d.new_count||0,
+      due: d.review_count||0,
+      learning: d.learn_count||0,
+      total: d.total_in_deck||0,
+      done: reviewedToday[i],
+    }));
+
+    if(curDeckIdx>=ankiDecks.length) curDeckIdx=0;
+    renderDeckNav();
+
+    // 7-day collection activity
+    try{
+      const today=new Date();
+      const dayBars=await Promise.all(Array.from({length:7},async(_,i)=>{
+        const daysAgo=6-i;
+        try{
+          const cards=await ankiReq('findCards',{query:`rated:${daysAgo+1} -rated:${daysAgo}`});
+          return cards.length;
+        }catch{return 0;}
+      }));
+      renderAnkiBars(dayBars);
+    }catch{renderAnkiBars(Array(7).fill(0));}
+
+  }catch(e){
+    console.error('AnkiConnect error',e);
+    errEl.style.display='block';
+    set('deck-title','—');
+  }
+}
+
+function renderDeckNav(){
+  if(!ankiDecks.length){set('deck-title','No decks found');return;}
+  const d=ankiDecks[curDeckIdx];
+  set('deck-title', d.name);
+  set('d-done', d.done);
+  set('d-new',  d.new);
+  set('d-due',  d.due);
+  set('d-total',d.total.toLocaleString());
+
+  // Arrow states
+  document.getElementById('deck-prev').disabled=curDeckIdx===0;
+  document.getElementById('deck-next').disabled=curDeckIdx===ankiDecks.length-1;
+
+  // Pager dots
+  const pager=document.getElementById('deck-pager');
+  pager.innerHTML=ankiDecks.map((_,i)=>`<div class="deck-dot${i===curDeckIdx?' active':''}" onclick="jumpDeck(${i})"></div>`).join('');
+
+  // Upcoming for this deck
+  renderDeckUpcoming(d.name);
+}
+
+function moveDeck(dir){curDeckIdx=Math.max(0,Math.min(ankiDecks.length-1,curDeckIdx+dir));renderDeckNav();}
+function jumpDeck(i){curDeckIdx=i;renderDeckNav();}
+
+async function renderDeckUpcoming(deckName){
+  const el=document.getElementById('deck-upcoming');
+  const lbl=document.getElementById('deck-upcoming-label');
+  el.innerHTML='<div class="loading-pill">Loading…</div>';
+  if(lbl) lbl.textContent=deckName;
+  try{
+    // Cards due tomorrow
+    const tomorrow=await ankiReq('findCards',{query:`deck:"${deckName}" prop:due=1`});
+    const next3=await ankiReq('findCards',{query:`deck:"${deckName}" prop:due<=3 -prop:due<=0`});
+    el.innerHTML=`
+      <div class="rr"><span class="rr-l">Due tomorrow</span><span class="rr-r">${tomorrow.length}</span></div>
+      <div class="rr"><span class="rr-l">Due in 3 days</span><span class="rr-r">${next3.length}</span></div>
+    `;
+  }catch{el.innerHTML='<p style="font-size:.8rem;color:var(--ink3)">Could not load upcoming.</p>';}
+}
+
+function renderAnkiBars(counts){
+  const now=new Date();
+  const labels=Array.from({length:7},(_,i)=>{
+    const d=new Date(now);d.setDate(now.getDate()-(6-i));
+    return {
+      day:d.toLocaleDateString('en-US',{weekday:'short'}),
+      date:d.toLocaleDateString('en-US',{month:'short',day:'numeric'}),
+      isToday:i===6
+    };
+  });
+  const max=Math.max(...counts,1);
+  const el=document.getElementById('anki-bars');
+  if(!el) return;
+  el.innerHTML=counts.map((c,i)=>{
+    const pct=Math.max(Math.round((c/max)*100),c?2:0);
+    const {day,date,isToday}=labels[i];
+    const col=isToday?'var(--accent)':'var(--accent2)';
+    return `<div class="bar-col">
+      <div class="bar-val">${c||''}</div>
+      <div class="bar-fill" style="height:${pct}%;background:${col};opacity:${c?1:.15};"></div>
+      <div class="bar-day" style="${isToday?'color:var(--accent);':''}">${day}</div>
+      <div class="bar-day" style="font-size:.56rem;opacity:.65;">${date}</div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════
+//  KANJI GRID + POPUP
+// ══════════════════════════════════════════
+function setKF(f,el){curKF=f;document.querySelectorAll('.fp').forEach(p=>p.classList.remove('active'));el.classList.add('active');renderKanjiGrid();}
+
+function kanjiStatus(c){
+  if(manualKanji[c]) return 'manual';
+  const w=wkKanjiData[c];
+  if(w==='burned'||w==='passed') return 'known';
+  if(w==='learning') return 'learning';
+  return 'locked';
+}
+
+function onKanjiSearch(value){
+  kSearchQuery = (value||'').trim().toLowerCase();
+  document.getElementById('k-search-clear').style.display = kSearchQuery ? 'block' : 'none';
+  renderKanjiGrid();
+}
+
+function clearKanjiSearch(){
+  document.getElementById('k-search').value = '';
+  onKanjiSearch('');
+}
+
+// Returns true if a kanji matches the current search query.
+// Matches: the kanji char itself, English meaning (from local KDB or Jisho cache).
+function kanjiMatchesSearch(c, query){
+  if(!query) return true;
+  // Direct char match (typed Japanese)
+  if(c.includes(query)) return true;
+  // Local DB
+  const local = (typeof KDB !== 'undefined') ? KDB[c] : null;
+  if(local){
+    if(local.meaning && local.meaning.toLowerCase().includes(query)) return true;
+    if(local.on && local.on.toLowerCase().includes(query)) return true;
+    if(local.kun && local.kun.toLowerCase().includes(query)) return true;
+  }
+  // Jisho cache
+  const cached = jishoCache && jishoCache[c];
+  if(cached?.kanji?.meaning && cached.kanji.meaning.toLowerCase().includes(query)) return true;
+  return false;
+}
+
+function renderKanjiGrid(){
+  const baseList = JLPT_LISTS[curKF] || JLPT_LISTS.joyo;
+  // Apply search filter
+  const list = kSearchQuery ? baseList.filter(c => kanjiMatchesSearch(c, kSearchQuery)) : baseList;
+
+  const grid = document.getElementById('kanji-grid');
+  const pb = document.getElementById('kp-bars');
+  if(!grid || !pb) return;
+
+  // Show empty state if no results
+  if(kSearchQuery && list.length === 0){
+    grid.innerHTML = `<div class="empty-s" style="width:100%;padding:2rem;"><span class="ei">🔍</span>No kanji match "<strong>${kSearchQuery}</strong>" in this list.<br><span style="font-size:.75rem;opacity:.7;">Try Jōyō for the full set, or search by Japanese character.</span></div>`;
+    pb.innerHTML = '';
+    return;
+  }
+
+  let known=0, learning=0, manual=0;
+  list.forEach(c => { const s=kanjiStatus(c); if(s==='known') known++; else if(s==='learning') learning++; else if(s==='manual') manual++; });
+  const total = list.length, knownAll = known + manual;
+
+  grid.innerHTML = list.map(c => {
+    const s = kanjiStatus(c);
+    return `<div class="kc ${s}" onclick="openKpop('${c}')" title="${c}">${c}</div>`;
+  }).join('');
+
+  // Progress bars adapt to filtered results when searching
+  const barLabel = kSearchQuery ? ` (filtered: ${list.length})` : '';
+  pb.innerHTML = [
+    {label:'Known',count:knownAll,color:'var(--known)'},
+    {label:'Learning',count:learning,color:'var(--learning)'},
+    {label:'Locked',count:total-knownAll-learning,color:'var(--border2)'},
+  ].map(r => `<div class="kp-row"><span class="kp-lbl">${r.label}</span><div class="kp-bw"><div class="kp-bf" style="width:${Math.round((r.count/Math.max(total,1))*100)}%;background:${r.color};"></div></div><span class="kp-ct">${r.count} / ${total}${barLabel}</span></div>`).join('');
+}
+
+// Cache Jisho responses so we don't re-fetch on every popup open
+const jishoCache = JSON.parse(localStorage.getItem('jisho_cache')||'{}');
+
+async function fetchJisho(char){
+  if(jishoCache[char]) return jishoCache[char];
+  try{
+    // Fire two requests in parallel:
+    // 1. /kanji?char=X — scrapes kanji page for meaning + on/kun readings
+    // 2. /jisho?keyword=X — gets common words containing this kanji
+    const [kanjiR, wordsR] = await Promise.all([
+      fetch(`/kanji?char=${encodeURIComponent(char)}`),
+      fetch(`/jisho?keyword=${encodeURIComponent(char)}`),
+    ]);
+
+    let kanjiInfo = {meaning:'', on:'', kun:''};
+    if(kanjiR.ok){
+      const kj = await kanjiR.json();
+      kanjiInfo = {
+        meaning: kj.meaning || '',
+        on: kj.on || '',
+        kun: kj.kun || '',
+      };
+    }
+
+    let words = [];
+    if(wordsR.ok){
+      const wj = await wordsR.json();
+      words = (wj.data||[])
+        .filter(d=>d.is_common && d.japanese?.[0]?.word?.includes(char))
+        .slice(0,5)
+        .map(d=>({
+          w: d.japanese[0].word,
+          r: d.japanese[0].reading || '',
+          e: d.senses[0]?.english_definitions?.slice(0,2).join(', ') || ''
+        }));
+    }
+
+    const data = { kanji: kanjiInfo, words };
+    jishoCache[char] = data;
+    localStorage.setItem('jisho_cache', JSON.stringify(jishoCache));
+    return data;
+  }catch(e){
+    console.error('Jisho error:',e);
+    return null;
+  }
+}
+
+async function openKpop(char){
+  const status=kanjiStatus(char);
+  const statusColors={known:'var(--known)',manual:'var(--accent)',learning:'var(--learning)',locked:'var(--border2)'};
+  const statusLabels={known:'WK passed / burned',manual:'Manually marked known',learning:'WK in progress',locked:'Not started'};
+
+  // Show popup with loading state immediately
+  document.getElementById('kpop').innerHTML=`
+    <div class="kpop-header">
+      <div class="kpop-kanji">${char}</div>
+      <div class="kpop-meta">
+        <div class="kpop-meaning"><span class="loading-pill">Looking up…</span></div>
+      </div>
+      <button class="kpop-close" onclick="closeKpop()">✕</button>
+    </div>
+    <div class="kpop-body">
+      <div style="padding:1rem 0;text-align:center;color:var(--ink3);font-size:.8rem;">Fetching from Jisho.org…</div>
+    </div>
+  `;
+  document.getElementById('kpop-overlay').classList.add('open');
+
+  // Try local DB first (instant), then enrich from Jisho
+  const localData = KDB[char];
+  const jisho = await fetchJisho(char);
+
+  // Use local data if available, else Jisho's scraped data
+  const finalMeaning = localData?.meaning || jisho?.kanji?.meaning || '(meaning unavailable)';
+  const finalOn = localData?.on || jisho?.kanji?.on || '';
+  const finalKun = localData?.kun || jisho?.kanji?.kun || '';
+
+  // Words: prefer Jisho if it returned results, fall back to local
+  let words = [];
+  if(jisho?.words?.length){
+    words = jisho.words;
+  } else if(localData?.words?.length){
+    words = localData.words;
+  }
+
+  let wordsHTML='';
+  if(words.length){
+    wordsHTML=`<div class="kpop-section-lbl">Common words (from Jisho)</div><div class="kpop-words">`+
+    words.map(w=>`<div class="kpop-word">
+      <span class="kpop-word-jp">${linkifyKanji(w.w)}</span>
+      <div class="kpop-word-right">
+        <div class="kpop-word-read">${w.r}</div>
+        <div class="kpop-word-en">${w.e}</div>
+      </div>
+    </div>`).join('')+'</div>';
+  } else {
+    wordsHTML=`<div class="kpop-section-lbl">Words</div><p style="font-size:.8rem;color:var(--ink3);">No common words found. See Jisho link below for more.</p>`;
+  }
+
+  const readingsHTML=(finalOn||finalKun)?`
+    <div class="kpop-readings">
+      ${finalOn?`<div class="kpop-reading-row"><span class="kpop-rtag">音</span><span class="kpop-rval">${finalOn}</span></div>`:''}
+      ${finalKun?`<div class="kpop-reading-row"><span class="kpop-rtag kun">訓</span><span class="kpop-rval">${finalKun}</span></div>`:''}
+    </div>
+  `:`<p style="font-size:.78rem;color:var(--ink3);">Readings: see Jisho link below</p>`;
+
+  document.getElementById('kpop').innerHTML=`
+    <div class="kpop-header">
+      <div class="kpop-kanji">${char}</div>
+      <div class="kpop-meta">
+        <div class="kpop-meaning">${finalMeaning}</div>
+        ${readingsHTML}
+      </div>
+      <button class="kpop-close" onclick="closeKpop()">✕</button>
+    </div>
+    <div class="kpop-body">
+      ${wordsHTML}
+      <div class="kpop-status">
+        <div class="kpop-status-dot" style="background:${statusColors[status]};"></div>
+        <span class="kpop-status-lbl">${statusLabels[status]}</span>
+        <button class="btn btn-ghost btn-sm kpop-toggle" onclick="toggleKanjiFromPopup('${char}')">${status==='manual'?'Unmark known':'Mark as known'}</button>
+      </div>
+    </div>
+    <a class="kpop-jisho" href="https://jisho.org/search/${char}%20%23kanji" target="_blank">Open ${char} on Jisho.org →</a>
+  `;
+}
+
+function closeKpop(){document.getElementById('kpop-overlay').classList.remove('open');}
+
+function toggleKanjiFromPopup(char){
+  manualKanji[char]=!manualKanji[char];
+  if(!manualKanji[char]) delete manualKanji[char];
+  localStorage.setItem('manual_kanji',JSON.stringify(manualKanji));
+  renderKanjiGrid();
+  openKpop(char); // re-render popup with updated status
+}
+
+// ══════════════════════════════════════════
+//  FACT
+// ══════════════════════════════════════════
+function renderFact(){
+  const f=FACTS[new Date().getDay()%FACTS.length];
+  document.getElementById('daily-fact').innerHTML=`<div class="fact-lbl">✦ Grammar Point of the Day</div><div class="fact-jp">${linkifyKanji(f.jp)}</div><div class="fact-read">${f.read}</div><div class="fact-meaning">${linkifyKanji(f.meaning)}</div><div class="fact-ex"><strong>Example:</strong><br>${linkifyKanji(f.ex.replace('\n','<br>'))}</div>`;
+}
+
+// ══════════════════════════════════════════
+//  STREAK
+// ══════════════════════════════════════════
+function computeStreak(){
+  const dates=[...new Set(logs.map(l=>l.date))].sort().reverse();
+  let streak=0,check=new Date();
+  for(const d of dates){if(d===check.toISOString().slice(0,10)){streak++;check.setDate(check.getDate()-1);}else if(d<check.toISOString().slice(0,10))break;}
+  set('streak-num',streak);
+  const sub=document.getElementById('streak-sub');
+  if(sub) sub.textContent=dates[0]===todayStr()?'Session logged today. Keep it up!':'No session today yet — don\'t break the streak!';
+}
+
+// ══════════════════════════════════════════
+//  LOG
+// ══════════════════════════════════════════
+const TYPE_LABELS={game:'🎮 Game Mining',immersion:'🎧 Immersion',reading:'📖 Reading',speaking:'🗣 Speaking',other:'✏ Other'};
+function addLog(){
+  const type=document.getElementById('log-type').value,dur=parseInt(document.getElementById('log-dur').value),date=document.getElementById('log-date').value,notes=document.getElementById('log-notes').value.trim();
+  if(!dur||dur<1){alert('Enter a valid duration.');return;}if(!date){alert('Select a date.');return;}
+  logs.push({id:Date.now(),type,duration:dur,date,notes});saveLogs();
+  document.getElementById('log-dur').value='';document.getElementById('log-notes').value='';
+  computeStreak();renderTodayLogs();renderAllLogs();renderWeekly();
+}
+function deleteLog(id){logs=logs.filter(l=>l.id!==id);saveLogs();computeStreak();renderTodayLogs();renderAllLogs();renderWeekly();}
+function saveLogs(){localStorage.setItem('jp_logs',JSON.stringify(logs));}
+function entryHTML(e){return `<div class="log-entry"><div class="e-meta"><span class="e-type t-${e.type}">${TYPE_LABELS[e.type]||e.type}</span><span class="e-desc">${linkifyKanji(e.notes)||'—'}</span></div><div class="e-r"><span class="e-time">${e.duration} min · ${e.date}</span><button class="btn-del" onclick="deleteLog(${e.id})">✕</button></div></div>`;}
+function renderTodayLogs(){
+  const today=logs.filter(l=>l.date===todayStr()),el=document.getElementById('today-log-list');
+  if(!el) return;
+  if(!today.length){el.innerHTML='<div class="empty-s"><span class="ei">✏</span>No sessions today.</div>';set('today-total','');return;}
+  set('today-total',today.reduce((a,b)=>a+b.duration,0)+' min total');
+  el.innerHTML=[...today].sort((a,b)=>b.id-a.id).map(entryHTML).join('');
+}
+function renderAllLogs(){
+  const el=document.getElementById('all-log-list');set('all-count',`${logs.length} sessions`);
+  if(!el) return;
+  if(!logs.length){el.innerHTML='<div class="empty-s"><span class="ei">📋</span>No sessions yet.</div>';return;}
+  el.innerHTML=[...logs].sort((a,b)=>b.id-a.id).map(entryHTML).join('');
+}
+
+// ══════════════════════════════════════════
+//  WEEKLY
+// ══════════════════════════════════════════
+function moveWeekTab(dir){
+  curWeekTab = (curWeekTab + dir + WEEK_TABS.length) % WEEK_TABS.length;
+  renderWeekly();
+}
+
+async function fetchWeekAnki(days){
+  if(weekAnkiData && weekAnkiData.some(c=>c>0)) return weekAnkiData;
+  try{
+    const all = await ankiReq('getNumCardsReviewedByDay');
+    const map = {};
+    (all||[]).forEach(([date,count])=>{ map[date]=count; });
+    const counts = days.map(d => map[d] || 0);
+    console.log('[Anki] week counts:', counts, 'days:', days);
+    weekAnkiData = counts;
+    return counts;
+  }catch(e){
+    console.error('[Anki] week error:',e);
+    return Array(7).fill(0);
+  }
+}
+
+async function renderWeekly(){
+  const now=new Date(),dow=now.getDay(),mon=new Date(now);mon.setDate(now.getDate()-((dow+6)%7));
+  const days=Array.from({length:7},(_,i)=>{const d=new Date(mon);d.setDate(mon.getDate()+i);return localDateStr(d);});
+  const rEl=document.getElementById('week-range');if(rEl) rEl.textContent=`${days[0]} – ${days[6]}`;
+
+  // Always compute manual log totals for the side cards
+  const wl=logs.filter(l=>l.date>=days[0]&&l.date<=days[6]);
+  const sessTotals=days.map(d=>wl.filter(l=>l.date===d).reduce((a,b)=>a+b.duration,0));
+  const tt=sessTotals.reduce((a,b)=>a+b,0);
+  set('week-total',tt);set('week-days',sessTotals.filter(t=>t>0).length);set('week-avg',Math.round(tt/7));
+
+  // Get bar data for current tab
+  const tab = WEEK_TABS[curWeekTab];
+  let totals = sessTotals;
+  if(tab.key === 'anki') totals = await fetchWeekAnki(days);
+
+  // Update tab label
+  set('week-tab-label', tab.label);
+  set('week-tab-sub', tab.sub);
+
+  // Pager dots
+  const pager=document.getElementById('week-tab-pager');
+  if(pager) pager.innerHTML=WEEK_TABS.map((_,i)=>`<div class="deck-dot${i===curWeekTab?' active':''}" onclick="curWeekTab=${i};renderWeekly();"></div>`).join('');
+
+  const max=Math.max(...totals,1);
+  const dNames=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const bEl=document.getElementById('week-bars');
+  if(bEl) bEl.innerHTML=days.map((d,i)=>{
+    const pct=Math.max(Math.round((totals[i]/max)*100),totals[i]?2:0);
+    const isToday=d===todayStr();
+    const dateLbl=new Date(d+'T12:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    return `<div class="bar-col"><div class="bar-val">${totals[i]||''}</div><div class="bar-fill" style="height:${pct}%;background:${isToday?'var(--accent)':tab.color};opacity:${totals[i]?1:.15};"></div><div class="bar-day" style="${isToday?'color:var(--accent);':''}">${dNames[i]}</div><div class="bar-day" style="font-size:.56rem;opacity:.65;">${dateLbl}</div></div>`;
+  }).join('');
+
+  const typeKeys=['game','immersion','reading','speaking','other'];
+  const bd=typeKeys.map(t=>({label:TYPE_LABELS[t],total:wl.filter(l=>l.type===t).reduce((a,b)=>a+b.duration,0)})).filter(t=>t.total>0).sort((a,b)=>b.total-a.total);
+  const bdEl=document.getElementById('week-breakdown');
+  if(bdEl) bdEl.innerHTML=!bd.length?'<div class="empty-s" style="padding:1rem;"><span class="ei">📊</span>No sessions this week.</div>':bd.map(t=>`<div class="rr"><span class="rr-l">${t.label}</span><span class="rr-r">${t.total} min</span></div>`).join('');
+}
+
+// ══════════════════════════════════════════
+//  GSM
+// ══════════════════════════════════════════
+function handleGSMDrop(e){e.preventDefault();document.getElementById('gsm-drop').classList.remove('over');const f=e.dataTransfer.files[0];if(f)parseGSMFile(f);}
+function handleGSMFile(e){const f=e.target.files[0];if(f)parseGSMFile(f);}
+function parseGSMFile(file){
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    const text=ev.target.result,rows=text.split('\n').filter(r=>r.trim());if(!rows.length)return;
+    function parseRow(line){const res=[];let cur='',inQ=false;for(let i=0;i<line.length;i++){const c=line[i];if(c==='"'){inQ=!inQ;}else if(c===','&&!inQ){res.push(cur.trim());cur='';}else{cur+=c;}}res.push(cur.trim());return res;}
+    const headers=parseRow(rows[0]).map(h=>h.toLowerCase().replace(/['"]/g,''));
+    const ci={sentence:headers.findIndex(h=>h.includes('sentence')||h.includes('text')),source:headers.findIndex(h=>h.includes('game')||h.includes('source')||h.includes('deck')||h.includes('title')||h.includes('media')),date:headers.findIndex(h=>h.includes('date')||h.includes('time')||h.includes('created')),word:headers.findIndex(h=>h.includes('word')||h.includes('vocab')||h.includes('expression'))};
+    gsmData=rows.slice(1).map(r=>{const cells=parseRow(r);return{sentence:ci.sentence>=0?(cells[ci.sentence]||''):'',source:ci.source>=0?(cells[ci.source]||'Unknown'):'Unknown',date:ci.date>=0?(cells[ci.date]||''):'',word:ci.word>=0?(cells[ci.word]||''):'',};}).filter(r=>r.sentence||r.word);
+    localStorage.setItem('gsm_data',JSON.stringify(gsmData));renderGSM();
+  };reader.readAsText(file,'UTF-8');
+}
+function renderGSM(){
+  if(!gsmData.length){set('gsm-total','—');set('gsm-games','—');set('gsm-last','—');return;}
+  set('gsm-total',gsmData.length.toLocaleString());
+  const byGame={};gsmData.forEach(r=>{const g=r.source||'Unknown';if(!byGame[g])byGame[g]={count:0,dates:[]};byGame[g].count++;if(r.date)byGame[g].dates.push(r.date);});
+  const games=Object.entries(byGame).sort((a,b)=>b[1].count-a[1].count);
+  set('gsm-games',games.length);
+  const lastDate=gsmData.filter(r=>r.date).sort((a,b)=>b.date.localeCompare(a.date))[0];
+  set('gsm-last',lastDate?.source||'—');
+  document.getElementById('gsm-game-count').textContent=`${games.length} games`;
+  const maxC=Math.max(...games.map(g=>g[1].count),1);
+  document.getElementById('gsm-game-list').innerHTML=games.map(([name,info])=>{
+    const pct=Math.round((info.count/maxC)*100),lastD=info.dates.length?info.dates.sort().reverse()[0].slice(0,10):'';
+    return `<div class="gsm-game-row"><div><div class="ggr-name">${name}</div><div class="gsm-mini-bar" style="width:${pct}%;max-width:200px;"></div>${lastD?`<div class="ggr-sub" style="margin-top:3px;">last: ${lastD}</div>`:''}</div><div style="text-align:right;"><div class="ggr-count">${info.count.toLocaleString()}</div><div class="ggr-sub">cards</div></div></div>`;
+  }).join('');
+  const now=new Date(),days14=Array.from({length:14},(_,i)=>{const d=new Date(now);d.setDate(now.getDate()-(13-i));return d.toISOString().slice(0,10);});
+  const counts=days14.map(d=>gsmData.filter(r=>r.date&&r.date.slice(0,10)===d).length);
+  const maxB=Math.max(...counts,1);
+  const el=document.getElementById('gsm-bars');
+  if(el) el.innerHTML=days14.map((d,i)=>{const pct=Math.max(Math.round((counts[i]/maxB)*100),counts[i]?2:0);const lbl=new Date(d+'T12:00').toLocaleDateString('en-US',{weekday:'short'});return `<div class="bar-col"><div class="bar-val">${counts[i]||''}</div><div class="bar-fill" style="height:${pct}%;background:var(--accent3);opacity:${counts[i]?1:.15};"></div><div class="bar-day">${lbl}</div></div>`;}).join('');
+}
+function clearGSM(){if(confirm('Clear all GSM data?')){gsmData=[];localStorage.removeItem('gsm_data');renderGSM();}}
+
+// ══════════════════════════════════════════
+//  KANJI LINK UTILITY
+//  Wraps every kanji in a string with a clickable span
+// ══════════════════════════════════════════
+function linkifyKanji(text){
+  if(!text) return text;
+  return text.replace(/[\u4e00-\u9fff]/g, c =>
+    `<span class="k-link" onclick="openKpop('${c}')">${c}</span>`
+  );
+}
+
+// ══════════════════════════════════════════
+//  UTILS
+// ══════════════════════════════════════════
+function set(id,val){const el=document.getElementById(id);if(el)el.textContent=val;}
+
+// Get YYYY-MM-DD using LOCAL timezone (not UTC).
+// AnkiConnect and most stat APIs use local time, so we match.
+function localDateStr(d){
+  const y=d.getFullYear();
+  const m=String(d.getMonth()+1).padStart(2,'0');
+  const day=String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
+
+// ══════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════
+function init(){
+  // Restore theme. Migrate any legacy 'neon' value to 'dark' (neon was removed).
+  let t = localStorage.getItem('jp_theme') || 'washi';
+  if (t === 'neon') { t = 'dark'; localStorage.setItem('jp_theme','dark'); }
+  document.documentElement.setAttribute('data-theme', t);
+  document.querySelectorAll('.theme-opt').forEach(b => {
+    b.classList.toggle('active', b.dataset.themeVal === t);
+  });
+
+  wkKey=localStorage.getItem('wk_key')||'';
+  ankiUrl=localStorage.getItem('anki_url')||'http://localhost:8765';
+  logs=JSON.parse(localStorage.getItem('jp_logs')||'[]');
+  wkKanjiData=JSON.parse(localStorage.getItem('wk_kanji')||'{}');
+  manualKanji=JSON.parse(localStorage.getItem('manual_kanji')||'{}');
+  gsmData=JSON.parse(localStorage.getItem('gsm_data')||'[]');
+
+  document.getElementById('wk-key').value=wkKey;
+  document.getElementById('anki-url').value=ankiUrl;
+  document.getElementById('log-date').value=todayStr();
+
+  buildBPJLPTInputs();
+  loadBPInputs();
+  syncBPToCards();
+
+  updateDate();updateBanner();renderFact();
+  computeStreak();renderTodayLogs();renderAllLogs();renderWeekly();
+
+  if(wkKey) fetchWK();
+}
+init();
+</script>
+</body>
+</html>
