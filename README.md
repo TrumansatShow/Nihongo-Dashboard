@@ -46,7 +46,7 @@ That's it.
 
 **AnkiConnect**: No key, but you do need to whitelist `http://localhost:8080` in its config. See [setup.md](docs/setup.md).
 
-**BunPro**: Their public API isn't released yet — enter stats manually in the Grammar tab.
+**BunPro**: Their public API isn't released yet — enter stats manually in the Grammar tab!
 
 ## Running from source
 
