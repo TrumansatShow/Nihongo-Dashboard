@@ -25,7 +25,10 @@ Everything stores locally in your browser. Nothing leaves your machine except ca
 2. Make sure Anki is open with the [AnkiConnect add-on](https://ankiweb.net/shared/info/2055492159) installed
 3. Add `http://localhost:8080` to AnkiConnect's CORS list (see [setup.md](docs/setup.md))
 4. Double-click `Nihongo Dashboard.exe`
-5. Click the gear icon → paste your WaniKani token
+5. The dashboard opens in your browser. A small red 日 icon also appears in your system tray.
+6. Click the gear icon in the dashboard → paste your WaniKani token
+
+The exe runs quietly in the system tray. Click the tray icon any time to open the dashboard. Right-click for options: **Start with Windows** (auto-launch on boot) and **Quit**.
 
 That's it.
 
@@ -46,12 +49,12 @@ That's it.
 
 **AnkiConnect**: No key, but you do need to whitelist `http://localhost:8080` in its config. See [setup.md](docs/setup.md).
 
-**BunPro**: Their public API isn't released yet — enter stats manually in the Grammar tab!
+**BunPro**: Their public API isn't released yet — enter stats manually in the Grammar tab.
 
 ## Running from source
 
 ```bash
-git clone https://github.com/TrumansatShow/nihongo-dashboard
+git clone https://github.com/TrumanatShow/nihongo-dashboard
 cd nihongo-dashboard
 python3 server.py
 ```

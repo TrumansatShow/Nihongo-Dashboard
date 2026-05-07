@@ -24,17 +24,23 @@ pause
 exit
 
 :found
-echo  [1/3] Installing PyInstaller...
-%PY% -m pip install --upgrade pyinstaller
+echo  [1/4] Installing build dependencies (PyInstaller, pystray, Pillow)...
+%PY% -m pip install --upgrade pyinstaller pystray Pillow
 if %errorlevel% neq 0 (
-    echo  ERROR: PyInstaller install failed.
+    echo  ERROR: Dependency install failed.
     pause
     exit
 )
 
 echo.
-echo  [2/3] Building executable...
-%PY% -m PyInstaller --onefile --name "Nihongo Dashboard" --add-data "dashboard.html;." --icon=NONE --clean server.py
+echo  [2/4] Cleaning previous build...
+if exist build rmdir /S /Q build
+if exist dist rmdir /S /Q dist
+if exist "Nihongo Dashboard.spec" del "Nihongo Dashboard.spec"
+
+echo.
+echo  [3/4] Building executable (no console window)...
+%PY% -m PyInstaller --onefile --noconsole --name "Nihongo Dashboard" --add-data "dashboard.html;." --clean server.py
 if %errorlevel% neq 0 (
     echo  ERROR: Build failed.
     pause
@@ -42,7 +48,7 @@ if %errorlevel% neq 0 (
 )
 
 echo.
-echo  [3/3] Copying dashboard.html to dist folder...
+echo  [4/4] Copying dashboard.html to dist folder...
 copy dashboard.html "dist\dashboard.html" >nul
 
 echo.
@@ -50,8 +56,11 @@ echo  ========================================
 echo   Done!  Built: dist\Nihongo Dashboard.exe
 echo  ========================================
 echo.
-echo  Next steps:
-echo   1. Zip the contents of dist\ together with README.md
-echo   2. Upload as a GitHub Release
+echo  How it works:
+echo   - Double-click the exe
+echo   - It runs hidden in your system tray (look for a red 日 icon)
+echo   - Click the icon to open the dashboard
+echo   - Right-click for menu: Start with Windows / Quit
+echo   - No console window!
 echo.
 pause
