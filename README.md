@@ -79,4 +79,4 @@ GPL-3.0. See [LICENSE](LICENSE).
 
 ## Credits
 
-Built on top of [WaniKani](https://wanikani.com), [Jisho.org](https://jisho.org), and [AnkiConnect](https://github.com/FooSoft/anki-connect). Kanji JLPT data from KANJIDIC2.
+Built on top of [WaniKani](https://wanikani.com), [Jisho.org](https://jisho.org), and [AnkiConnect](https://github.com/FooSoft/anki-connect). Kanji and word data via Jisho.org, which sources from JMdict and KANJIDIC2 (CC BY-SA 4.0).
